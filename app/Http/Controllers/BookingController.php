@@ -19,10 +19,15 @@ class BookingController extends Controller
         // Customer can see their own bookings only
         if ($request->user()->hasRole('customer')) {
             $user = Auth::user();
-            return Inertia::render('bookings/Index', [
-                'bookings' => $user->turnamens()->latest()->get()
+            return Inertia::render('bookings/index', [
+                'bookings' => $user->bookings()->latest()->get()
             ]);
         }
+
+        $user = Auth::user();
+        return Inertia::render('bookings/Index', [
+            'bookings' => $user->bookings()->latest()->get()
+        ]);
         // 
     }
 
@@ -31,7 +36,13 @@ class BookingController extends Controller
      */
     public function create(Request $request)
     {
-        //
+        // Customer can see their own bookings only
+        if ($request->user()->hasRole('customer')) {
+            $user = Auth::user();
+            return Inertia::render('bookings/Create', [
+                'bookings' => $user->bookings()->latest()->get()
+            ]);
+        }
     }
 
     /**
