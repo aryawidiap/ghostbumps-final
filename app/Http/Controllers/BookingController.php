@@ -19,7 +19,7 @@ class BookingController extends Controller
         // Customer can see their own bookings only
         if ($request->user()->hasRole('customer')) {
             $user = Auth::user();
-            return Inertia::render('bookings/index', [
+            return Inertia::render('bookings/Index', [
                 'bookings' => $user->bookings()->latest()->get()
             ]);
         }

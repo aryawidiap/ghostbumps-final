@@ -25,6 +25,7 @@ const toggleDropdown = () => {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500&family=Special+Elite&display=swap');
 </style>
+
 <template>
 
     <Head title="Make booking" />
