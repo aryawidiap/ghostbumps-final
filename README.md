@@ -10,8 +10,15 @@
 ## Start the app
 
 ```cmd
-php artisan serve --port=8000
-npm install && npm run build
+composer update
+npm install
+npm run build
 composer run dev
+php -d variables_order=GPCS artisan serve --port=8000
 
+```
+
+```
+cp .env.example .env
+php artisan key:generate
 ```
