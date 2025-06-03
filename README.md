@@ -2,10 +2,14 @@
 
 ## TODO
 
-[ ] Install spatie-permission
+[v] Install spatie-permission
 [V] php artisan make:model Booking -mrc
 [V] php artisan make:model Location -mrc
-[ ] Create migration properly
+[v] Create migration properly
+[ ] Create different header for admin and customer resources\js\components\AppHeader.vue
+[ ] Create booking func
+[ ] Create cancel booking func
+[ ] View booking func
 
 ## Start the app
 
@@ -33,4 +37,9 @@ npm install
 npm run build
 composer run dev
 php -d variables_order=GPCS artisan serve --port=8000
+```
+
+```cmd
+cp .env.example .env
+php artisan key:generate
 ```
