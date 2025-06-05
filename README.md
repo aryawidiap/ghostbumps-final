@@ -16,6 +16,33 @@
     [ ] List all booking for today
     [ ] Refund the money
 
+## Routes
+
+- Customer
+    - Bookings
+        [ ] Make a new booking
+        [ ] Cancel a future booking
+        [ ] Edit a future booking
+    - Dashboard
+        [ ] Show future booking
+        [ ] Show booking history, sort by date
+        [ ] Show location in past booking
+        [ ] Show location NOT in past booking
+- Admin
+    - Bookings
+        [ ] Make booking on behalf of customer
+        [ ] Cancel a booking of a customer
+        [ ] Edit a future booking
+        [ ] Accept a refund request
+    - Dashboard
+        [ ] Show future booking, closest to time now (Status: uncompleted, oldest, time > now)
+        [ ] Show cancellation request
+        [ ] Show today's stats: number of booking today, compare to yesterday
+        [ ] Show weekly and monthly stats too.
+        <!-- https://github.com/nathanreyes/v-calendar/issues/632 -->
+    - Statistics
+        [ ] ??
+
 ## Start the app
 
 ### Generate autoload, env, database

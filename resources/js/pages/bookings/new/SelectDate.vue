@@ -12,6 +12,9 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
+import { ref } from 'vue';
+const date = ref(new Date());
+
 defineProps(['bookings']);
 </script>
 
@@ -25,6 +28,8 @@ defineProps(['bookings']);
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <!-- Put code here -->
+            <VCalendar />
+            <VDatePicker v-model="date" />
         </div>
     </AppLayout>
 </template>
