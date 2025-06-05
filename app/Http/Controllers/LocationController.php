@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Location;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class LocationController extends Controller
 {
@@ -12,7 +14,13 @@ class LocationController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        // var_dump(Location::all());
+        if ($user->hasRole('customer')) {
+            return Inertia::render('locations/Index', [
+                'locations' => Location::all()
+            ]);
+        }
     }
 
     /**

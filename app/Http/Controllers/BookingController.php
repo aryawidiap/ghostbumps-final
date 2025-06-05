@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use App\Models\Location;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -38,9 +39,19 @@ class BookingController extends Controller
     {
         // Customer can see their own bookings only
         if ($request->user()->hasRole('customer')) {
-            $user = Auth::user();
-            return Inertia::render('bookings/Create', [
-                'bookings' => $user->bookings()->latest()->get()
+            return Inertia::render('bookings/new/SelectLocation', [
+                'locations' => Location::all()
+            ]);
+        }
+    }
+    public function createSelectTime(Location $location)
+    {
+        // Customer can see their own bookings only
+        $user = Auth::user();
+
+        if ($user->hasRole('customer')) {
+            return Inertia::render('bookings/new/SelectDate', [
+                'locations' => Location::all()
             ]);
         }
     }

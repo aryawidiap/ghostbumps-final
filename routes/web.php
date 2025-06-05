@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\LocationController;
 use App\Models\Booking;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -13,12 +14,16 @@ Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware(['auth', 'verified',])
+Route::middleware(['auth', 'verified',]) // TODO: add role middleware
     ->name('customer.')
-    ->prefix('customer')
     ->group(function () {
         Route::resource('bookings', BookingController::class)
-            ->only(['index', 'create', 'store', 'show', 'edit', 'update']);
+            ->only(['index', 'store', 'create', 'show', 'edit', 'update']);
+        Route::get('bookings/new/select-location', [BookingController::class, 'create'])->name('new.select-location');
+        Route::post('bookings/new/select-time', [BookingController::class, 'create'])->name('new.select-time');
+        Route::post('bookings/new/number-of-person', [BookingController::class, 'create'])->name('new.number-of-person');
+        Route::post('bookings/new/confirm-details', [BookingController::class, 'create'])->name('new.confirm-details');
+        Route::get('location', [LocationController::class, 'index'])->name('location');
 });
 
 // Route::middleware(['auth', 'verified', 'role:admin'])

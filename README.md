@@ -69,7 +69,7 @@ nvm use 24.1.0
 
 ```cmd
 npm install
-npm run build
+npm run dev
 composer run dev
 php -d variables_order=GPCS artisan serve --port=8000
 ```
