@@ -14,6 +14,7 @@ class Location extends Model
      */
     protected $fillable = [
         'name',
+        'photo_path',
         'address',
         'description',
         'short_description',
