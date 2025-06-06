@@ -6,6 +6,7 @@ use App\Models\Booking;
 use App\Models\Location;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Inertia\Inertia;
 
 class BookingController extends Controller
@@ -51,10 +52,63 @@ class BookingController extends Controller
 
         if ($user->hasRole('customer')) {
             return Inertia::render('bookings/new/SelectDate', [
+                'locations' => $location
+            ]);
+        }
+    }
+
+    public function getAvailableTimeSlot(Request $request)
+    {
+        $allTimeSlot = [];
+
+        for ($i = 10; $i <= 20; $i++) {
+            if ($i == 13) {
+                array_push($allTimeSlot, [
+                    "time" => $i,
+                    "isAvailable" => false,
+                ]);
+                continue;
+            }
+
+            array_push($allTimeSlot, [
+                "time" => $i,
+                "isAvailable" => true,
+            ]);
+        }
+
+        $date = $request->input('date');
+
+
+        $availableTimeSlot = [...$allTimeSlot, $date];
+
+        return $allTimeSlot;
+    }
+
+    public function createNumberOfPerson(Location $location)
+    {
+        // Customer can see their own bookings only
+        $user = Auth::user();
+
+        if ($user->hasRole('customer')) {
+            return Inertia::render('bookings/new/NumberOfPerson', [
                 'locations' => Location::all()
             ]);
         }
     }
+
+    public function createConfirmDetails(Location $location)
+    {
+        // Customer can see their own bookings only
+        $user = Auth::user();
+
+        if ($user->hasRole('customer')) {
+            return Inertia::render('bookings/new/Details', [
+                'locations' => Location::all()
+            ]);
+        }
+    }
+
+
 
     /**
      * Store a newly created resource in storage.

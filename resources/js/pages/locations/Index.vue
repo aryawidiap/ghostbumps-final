@@ -30,7 +30,7 @@ defineProps(['locations']);
 
                     <!-- Location Card -->
                      <!-- TODO: adjust margin -->
-                    <div v-for="location in locations" v-bind:key="location.id" class="bg-red-900 rounded-3xl overflow-hidden md:flex shadow-lg">
+                    <div v-for="location in locations" v-bind:key="location.id" class="bg-red-900 rounded-3xl overflow-hidden md:flex shadow-lg mb-6">
                         <div class="md:w-1/2">
                             <!-- TODO: change the src to location:photo_path -->
                             <img src="/img/table-tennis-1428052_1920.jpg" alt="Ghostbumps Denpasar" class="w-full h-full object-cover" />

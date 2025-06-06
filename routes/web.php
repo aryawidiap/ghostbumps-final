@@ -20,11 +20,13 @@ Route::middleware(['auth', 'verified',]) // TODO: add role middleware
         Route::resource('bookings', BookingController::class)
             ->only(['index', 'store', 'create', 'show', 'edit', 'update']);
         Route::get('bookings/new/select-location', [BookingController::class, 'create'])->name('new.select-location');
-        Route::post('bookings/new/select-time', [BookingController::class, 'create'])->name('new.select-time');
-        Route::post('bookings/new/number-of-person', [BookingController::class, 'create'])->name('new.number-of-person');
-        Route::post('bookings/new/confirm-details', [BookingController::class, 'create'])->name('new.confirm-details');
+        Route::get('bookings/new/{location}/select-time', [BookingController::class, 'createSelectTime'])->name('new.select-time');
+        Route::post('bookings/new/number-of-person', [BookingController::class, 'createNumberOfPerson'])->name('new.number-of-person');
+        Route::post('bookings/new/confirm-details', [BookingController::class, 'createConfirmDetails'])->name('new.confirm-details');
         Route::get('location', [LocationController::class, 'index'])->name('location');
 });
+
+
 
 // Route::middleware(['auth', 'verified', 'role:admin'])
 //     ->name('admin.')

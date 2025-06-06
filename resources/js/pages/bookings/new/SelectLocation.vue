@@ -22,8 +22,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 defineProps(['locations']);
 
 const form = useForm({
-    jenisPertandingan: null,
-    jumlahPeserta: null,
+    location_id: null,
 });
 
 import { ref } from 'vue'
@@ -67,15 +66,14 @@ const toggleDropdown = () => {
                                 {{ location.description }}
                             </p>
                             <!-- TODO: form smhw still post -->
-                            <form
-                                @submit.prevent="form.post(route('customer.new.select-time', location), { onSuccess: () => form.reset() })">
+
+                            <a :href="route('customer.new.select-time', location)">
                                 <button
-                                    class="bg-white text-red-700 font-bold px-6 py-2 rounded-full hover:bg-gray-200 hover:text-red-900"
-                                    name="location_id" v-bind:value="location.id">
+                                type="submit"
+                                    class="bg-white text-red-700 font-bold px-6 py-2 rounded-full hover:bg-gray-200 hover:text-red-900">
                                     Select
                                 </button>
-                            </form>
-
+                            </a>
                         </div>
                     </div>
 
