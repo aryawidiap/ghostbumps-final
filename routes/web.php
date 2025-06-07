@@ -51,6 +51,6 @@ Route::middleware(['auth', 'verified', 'role:admin']) // TODO: add role middlewa
 //         // Route::resource('/permissions', PermissionController::class);
 //         Route::resource('/bookings', BookingController::class)
 //             ->only(['index', 'update', 'show', 'store']);
-    });
+    // });
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
