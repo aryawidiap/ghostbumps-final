@@ -19,6 +19,9 @@ return new class extends Migration
             $table->dateTime('booking_date');
             $table->dateTime('booking_hour');
             $table->string('status', 20);
+            $table->integer('cancelled_at')->nullable();
+            $table->integer('modified_at')->nullable();
+            $table->foreignId('modified_by')->nullable();
             $table->timestamps();
         });
     }
