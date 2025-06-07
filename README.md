@@ -18,6 +18,11 @@
 
 ## Routes
 
+- Public
+    - Locations
+        [v] Shows locations
+        [ ] Get ticket -> goes to login
+        [ ] Show pictures
 - Customer
     - Bookings
         [ ] Make a new booking

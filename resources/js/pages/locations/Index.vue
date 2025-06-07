@@ -19,7 +19,7 @@ defineProps(['locations']);
 </style>
 
 <template>
-    <Head title="All Location" />
+    <Head title="All Locations" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">

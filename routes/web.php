@@ -11,6 +11,8 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 })->name('home');
 
+Route::get('locations', [LocationController::class, 'index'])->name('locations');
+
 Route::get('dashboard', function () {
     $user = Auth::user();
     if ($user->hasRole('admin')) {
@@ -22,6 +24,7 @@ Route::get('dashboard', function () {
 
 Route::middleware(['auth', 'verified', 'role:customer']) // TODO: add role middleware
     ->name('customer.')
+    ->prefix('customer')
     ->group(function () {
         Route::resource('bookings', BookingController::class)
             ->only(['store', 'show', 'edit', 'update']);
@@ -36,6 +39,7 @@ Route::middleware(['auth', 'verified', 'role:customer']) // TODO: add role middl
 
 Route::middleware(['auth', 'verified', 'role:admin']) // TODO: add role middleware
     ->name('admin.')
+    ->prefix('admin')
     ->group(function () {
         Route::resource('bookings', BookingController::class)
             ->only(['index', 'store', 'create', 'show', 'edit', 'update']);

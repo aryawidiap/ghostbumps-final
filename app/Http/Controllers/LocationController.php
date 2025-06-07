@@ -15,7 +15,12 @@ class LocationController extends Controller
     public function index()
     {
         $user = Auth::user();
-        // var_dump(Location::all());
+
+        if ($user == null) {
+            return Inertia::render('public/Locations', [
+                'locations' => Location::all()
+            ]);
+        }
         if ($user->hasRole('customer')) {
             return Inertia::render('locations/Index', [
                 'locations' => Location::all()
