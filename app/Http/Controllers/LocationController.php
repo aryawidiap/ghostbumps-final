@@ -21,6 +21,12 @@ class LocationController extends Controller
                 'locations' => Location::all()
             ]);
         }
+
+        if ($user->hasRole('admin')) {
+            return Inertia::render('admin/locations/Index', [
+                'locations' => Location::all()
+            ]);
+        }
     }
 
     /**
@@ -28,7 +34,11 @@ class LocationController extends Controller
      */
     public function create()
     {
-        //
+        if ($user->hasRole('admin')) {
+            return Inertia::render('admin/locations/Index', [
+                'locations' => Location::all()
+            ]);
+        }
     }
 
     /**
@@ -36,7 +46,11 @@ class LocationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($user->hasRole('admin')) {
+            return Inertia::render('admin/locations/Index', [
+                'locations' => Location::all()
+            ]);
+        }
     }
 
     /**
@@ -44,7 +58,11 @@ class LocationController extends Controller
      */
     public function show(Location $location)
     {
-        //
+        if ($user->hasRole('admin')) {
+            return Inertia::render('admin/locations/Index', [
+                'locations' => Location::all()
+            ]);
+        }
     }
 
     /**
@@ -52,7 +70,11 @@ class LocationController extends Controller
      */
     public function edit(Location $location)
     {
-        //
+        if ($user->hasRole('admin')) {
+            return Inertia::render('admin/locations/Index', [
+                'locations' => Location::all()
+            ]);
+        }
     }
 
     /**
@@ -60,7 +82,11 @@ class LocationController extends Controller
      */
     public function update(Request $request, Location $location)
     {
-        //
+        if ($user->hasRole('admin')) {
+            return Inertia::render('admin/locations/Index', [
+                'locations' => Location::all()
+            ]);
+        }
     }
 
     /**
@@ -68,6 +94,10 @@ class LocationController extends Controller
      */
     public function destroy(Location $location)
     {
-        //
+        if ($user->hasRole('admin')) {
+            return Inertia::render('admin/locations/Index', [
+                'locations' => Location::all()
+            ]);
+        }
     }
 }

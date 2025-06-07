@@ -96,7 +96,7 @@ class BookingController extends Controller
         }
     }
 
-    public function createConfirmDetails(Location $location)
+    public function createConfirmDetails(Request $request)
     {
         // Customer can see their own bookings only
         $user = Auth::user();
