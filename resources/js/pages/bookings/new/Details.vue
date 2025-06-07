@@ -34,6 +34,7 @@ const handleConfirm = () => {
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500&family=Special+Elite&display=swap');
 </style>
 <template>
+
   <Head title="Make booking" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
@@ -51,11 +52,8 @@ const handleConfirm = () => {
 
           <!-- Experience Card -->
           <div class="bg-red-900 rounded-3xl overflow-hidden md:flex shadow-lg">
-            <div class="md:w-1/2">
-              <img src="house.jpg" alt="Ghostbumps Denpasar" class="w-full h-full object-cover" />
-            </div>
             <!-- Ticket Card -->
-            <div class="bg-red-800 rounded-3xl p-8 w-full max-w-2xl text-white">
+            <div class="rounded-3xl p-8 w-full max-w-2xl text-white">
               <h2 class="text-3xl mb-6 text-center">Ticket Details</h2>
               <div class="grid grid-cols-2 gap-y-3 text-lg">
                 <p>Customer Name</p>
@@ -72,13 +70,12 @@ const handleConfirm = () => {
 
                 <p>Number of Person(s)</p>
                 <p class="text-right">4 person(s)</p>
+                
               </div>
               <!-- Confirm Button -->
               <div class="mt-8 flex justify-center">
-                <button
-                  @click="handleConfirm"
-                  class="bg-white text-red-800 font-semibold px-6 py-3 rounded-full hover:bg-gray-100 transition"
-                >
+                <button @click="handleConfirm"
+                  class="bg-white text-red-800 font-semibold px-6 py-3 rounded-full hover:bg-gray-100 transition">
                   Confirm
                 </button>
               </div>
