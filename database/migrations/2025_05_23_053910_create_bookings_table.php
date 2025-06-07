@@ -16,8 +16,12 @@ return new class extends Migration
             $table->foreignId('user_id')->index();
             $table->foreignId('location_id')->index();
             $table->string('customer_name', 255);
-            $table->dateTime('booking_time');
+            $table->dateTime('booking_date');
+            $table->dateTime('booking_hour');
             $table->string('status', 20);
+            $table->integer('cancelled_at')->nullable();
+            $table->integer('modified_at')->nullable();
+            $table->foreignId('modified_by')->nullable();
             $table->timestamps();
         });
     }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\LocationController;
 use App\Models\Booking;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -13,13 +14,32 @@ Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware(['auth', 'verified',])
+Route::middleware(['auth', 'verified',]) // TODO: add role middleware
     ->name('customer.')
-    ->prefix('customer')
     ->group(function () {
         Route::resource('bookings', BookingController::class)
-            ->only(['index', 'create', 'store', 'show', 'edit', 'update']);
+            ->only(['index', 'store', 'show', 'edit', 'update']);
+        Route::get('bookings/new/select-location', [BookingController::class, 'create'])->name('new.select-location');
+        Route::get('bookings/new/{location}/select-time', [BookingController::class, 'createSelectTime'])->name('new.select-time');
+        Route::get('bookings/new/number-of-person', [BookingController::class, 'createNumberOfPerson'])->name('new.number-of-person');
+        Route::get('bookings/new/confirm-details', [BookingController::class, 'createConfirmDetails'])->name('new.confirm-details');
+        Route::get('location', [LocationController::class, 'index'])->name('location');
 });
+
+Route::middleware(['auth', 'verified',]) // TODO: add role middleware
+    ->name('admin.')
+    ->group(function () {
+        Route::resource('bookings', BookingController::class)
+            ->only(['index', 'store', 'create', 'show', 'edit', 'update']);
+        Route::get('bookings/new/', [BookingController::class, 'create'])->name('bookings.new');
+
+        Route::get('location', [LocationController::class, 'index'])->name('location');
+
+        Route::resource('locations', LocationController::class)
+            ->only(['index', 'store', 'create', 'edit', 'update']);
+});
+
+
 
 // Route::middleware(['auth', 'verified', 'role:admin'])
 //     ->name('admin.')

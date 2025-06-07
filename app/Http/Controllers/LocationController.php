@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Location;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class LocationController extends Controller
 {
@@ -12,7 +14,19 @@ class LocationController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        // var_dump(Location::all());
+        if ($user->hasRole('customer')) {
+            return Inertia::render('locations/Index', [
+                'locations' => Location::all()
+            ]);
+        }
+
+        if ($user->hasRole('admin')) {
+            return Inertia::render('admin/locations/Index', [
+                'locations' => Location::all()
+            ]);
+        }
     }
 
     /**
@@ -20,7 +34,11 @@ class LocationController extends Controller
      */
     public function create()
     {
-        //
+        if ($user->hasRole('admin')) {
+            return Inertia::render('admin/locations/Index', [
+                'locations' => Location::all()
+            ]);
+        }
     }
 
     /**
@@ -28,7 +46,11 @@ class LocationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($user->hasRole('admin')) {
+            return Inertia::render('admin/locations/Index', [
+                'locations' => Location::all()
+            ]);
+        }
     }
 
     /**
@@ -36,7 +58,11 @@ class LocationController extends Controller
      */
     public function show(Location $location)
     {
-        //
+        if ($user->hasRole('admin')) {
+            return Inertia::render('admin/locations/Index', [
+                'locations' => Location::all()
+            ]);
+        }
     }
 
     /**
@@ -44,7 +70,11 @@ class LocationController extends Controller
      */
     public function edit(Location $location)
     {
-        //
+        if ($user->hasRole('admin')) {
+            return Inertia::render('admin/locations/Index', [
+                'locations' => Location::all()
+            ]);
+        }
     }
 
     /**
@@ -52,7 +82,11 @@ class LocationController extends Controller
      */
     public function update(Request $request, Location $location)
     {
-        //
+        if ($user->hasRole('admin')) {
+            return Inertia::render('admin/locations/Index', [
+                'locations' => Location::all()
+            ]);
+        }
     }
 
     /**
@@ -60,6 +94,10 @@ class LocationController extends Controller
      */
     public function destroy(Location $location)
     {
-        //
+        if ($user->hasRole('admin')) {
+            return Inertia::render('admin/locations/Index', [
+                'locations' => Location::all()
+            ]);
+        }
     }
 }

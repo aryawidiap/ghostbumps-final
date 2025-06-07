@@ -14,12 +14,18 @@ class Booking extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'name',
         'customer_name',
-        'address',
-        'description',
+        'booking_date',
+        'booking_hour',
         'status'
     ];
+
+    // Add json description if booked by admin?
+    // user_id
+    // location_id
+    // customer_name
+    // booking_time
+    // status
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
