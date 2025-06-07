@@ -3,6 +3,7 @@
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\LocationController;
 use App\Models\Booking;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -11,14 +12,20 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('dashboard', function () {
-    return Inertia::render('Dashboard');
+    $user = Auth::user();
+    if ($user->hasRole('admin')) {
+        return Inertia::render('admin/Dashboard');
+    } else if ($user->hasRole('admin')) {
+        return Inertia::render('Dashboard');
+    }
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'verified', 'role:customer']) // TODO: add role middleware
     ->name('customer.')
     ->group(function () {
         Route::resource('bookings', BookingController::class)
-            ->only(['index', 'store', 'show', 'edit', 'update']);
+            ->only(['store', 'show', 'edit', 'update']);
+        Route::get('bookings/', [BookingController::class, 'index'])->name('bookings.index');
         Route::get('bookings/new/select-location', [BookingController::class, 'create'])->name('new.select-location');
         Route::get('bookings/new/{location}/select-time', [BookingController::class, 'createSelectTime'])->name('new.select-time');
         Route::get('bookings/new/number-of-person', [BookingController::class, 'createNumberOfPerson'])->name('new.number-of-person');
