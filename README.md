@@ -40,6 +40,12 @@
         [ ] Show today's stats: number of booking today, compare to yesterday
         [ ] Show weekly and monthly stats too.
         <!-- https://github.com/nathanreyes/v-calendar/issues/632 -->
+    - Location
+        [ ] Show location
+        [ ] Add location
+        [ ] Show today's stats: number of booking today, compare to yesterday
+        [ ] Show weekly and monthly stats too.
+        <!-- https://github.com/nathanreyes/v-calendar/issues/632 -->
     - Statistics
         [ ] ??
 
