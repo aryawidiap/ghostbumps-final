@@ -14,7 +14,7 @@ Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware(['auth', 'verified',]) // TODO: add role middleware
+Route::middleware(['auth', 'verified', 'role:customer']) // TODO: add role middleware
     ->name('customer.')
     ->group(function () {
         Route::resource('bookings', BookingController::class)
@@ -27,7 +27,7 @@ Route::middleware(['auth', 'verified',]) // TODO: add role middleware
         Route::get('location', [LocationController::class, 'index'])->name('location');
 });
 
-Route::middleware(['auth', 'verified',]) // TODO: add role middleware
+Route::middleware(['auth', 'verified', 'role:admin']) // TODO: add role middleware
     ->name('admin.')
     ->group(function () {
         Route::resource('bookings', BookingController::class)
@@ -51,6 +51,6 @@ Route::middleware(['auth', 'verified',]) // TODO: add role middleware
 //         // Route::resource('/permissions', PermissionController::class);
 //         Route::resource('/bookings', BookingController::class)
 //             ->only(['index', 'update', 'show', 'store']);
-//     });
+    // });
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
