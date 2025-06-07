@@ -16,21 +16,22 @@ class BookingController extends Controller
      */
     public function index(Request $request)
     {
-        // Admin and employee can see all bookings
+        $user = Auth::user();
 
+        // Admin and employee can see all bookings
+        if ($user->hasRole('admin')) {
+            $user = Auth::user();
+            return Inertia::render('admin/bookings/Index', [
+                'bookings' => $user->bookings()->latest()->get()
+            ]);
+        }
         // Customer can see their own bookings only
-        if ($request->user()->hasRole('customer')) {
+        if ($user->hasRole('customer')) {
             $user = Auth::user();
             return Inertia::render('bookings/Index', [
                 'bookings' => $user->bookings()->latest()->get()
             ]);
         }
-
-        $user = Auth::user();
-        return Inertia::render('bookings/Index', [
-            'bookings' => $user->bookings()->latest()->get()
-        ]);
-        // 
     }
 
     /**
@@ -38,7 +39,13 @@ class BookingController extends Controller
      */
     public function create(Request $request)
     {
-        // Customer can see their own bookings only
+        // Admin can create bookings on customer behalf
+        if ($request->user()->hasRole('admin')) {
+            return Inertia::render('bookings/new/SelectLocation', [
+                'locations' => Location::all()
+            ]);
+        }
+        // Customer can create their own bookings only
         if ($request->user()->hasRole('customer')) {
             return Inertia::render('bookings/new/SelectLocation', [
                 'locations' => Location::all()
