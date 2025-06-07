@@ -30,7 +30,7 @@ let isDateSelected = false;
 
 const availableTimes = ref([]);
 const getAvailableTime = () => {
-    if(!isDateSelected) {
+    if (!isDateSelected) {
         isDateSelected = true;
     }
     console.log(date)
@@ -57,6 +57,19 @@ function submit() {
     router.post('/', form)
 }
 
+const selectedDate = ref(null)
+const dates = Array.from({ length: 30 }, (_, i) => i + 1)
+
+function selectDate(date) {
+  selectedDate.value = date
+}
+
+function nextStep() {
+  if (selectedDate.value) {
+    localStorage.setItem('selectedDate', selectedDate.value)
+    router.visit('/bookings/new/number-of-person')
+  }
+}
 </script>
 
 <style scoped>
@@ -85,13 +98,15 @@ function submit() {
                             <!-- Show if time is not selected yet -->
                             <h2>Select time</h2>
                             <!-- Show if time is selected -->
-                            <h2 :class="{hidden: isDateSelected}">Time: {bind to selected time}</h2>
+                            <h2 :class="{ hidden: isDateSelected }">Time: {bind to selected time}</h2>
                             <fieldset>
                                 <ul>
                                     <li v-for="availableTime in availableTimes" :key="availableTime.time"
                                         :class="{ 'bg-white': !availableTime.isAvailable }">
-                                        <input type="radio" :id="availableTime.time" name="time" :value="availableTime.time">
-                                        <label :for="availableTime.time">{{ availableTime.time }}.00 - {{ availableTime.time + 1 }}.00</label>
+                                        <input type="radio" :id="availableTime.time" name="time"
+                                            :value="availableTime.time">
+                                        <label :for="availableTime.time">{{ availableTime.time }}.00 - {{
+                                            availableTime.time + 1 }}.00</label>
                                     </li>
                                 </ul>
                             </fieldset>
@@ -101,7 +116,21 @@ function submit() {
                     <div>
                         <button type="submit">Submit</button>
                     </div>
-
+                    <div class="min-h-screen bg-red-800 flex flex-col items-center justify-center text-white">
+                        <div class="bg-yellow-100 text-red-800 rounded-lg p-6">
+                            <h2 class="text-2xl font-semibold mb-4 text-center">Pick the date</h2>
+                            <!-- Dummy calendar for example -->
+                            <div class="grid grid-cols-7 gap-2">
+                                <div v-for="date in dates" :key="date" @click="selectDate(date)"
+                                    :class="{ 'bg-red-400 text-white': selectedDate === date, 'border border-red-400': true }"
+                                    class="rounded-full p-2 text-center cursor-pointer">
+                                    {{ date }}
+                                </div>
+                            </div>
+                            <button @click="nextStep"
+                                class="mt-4 bg-white text-red-800 px-4 py-2 rounded">Select</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

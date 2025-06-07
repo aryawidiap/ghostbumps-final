@@ -102,8 +102,9 @@ class BookingController extends Controller
         $user = Auth::user();
 
         if ($user->hasRole('customer')) {
-            return Inertia::render('bookings/new/Details', [
-                'locations' => Location::all()
+            return Inertia::render('bookings/new/ConfirmDetails', [
+                // 'locations' => Location::all()
+                'user' => $user
             ]);
         }
     }

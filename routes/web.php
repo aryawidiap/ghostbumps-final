@@ -23,6 +23,7 @@ Route::middleware(['auth', 'verified',]) // TODO: add role middleware
         Route::get('bookings/new/{location}/select-time', [BookingController::class, 'createSelectTime'])->name('new.select-time');
         Route::get('bookings/new/number-of-person', [BookingController::class, 'createNumberOfPerson'])->name('new.number-of-person');
         Route::get('bookings/new/confirm-details', [BookingController::class, 'createConfirmDetails'])->name('new.confirm-details');
+        Route::post('bookings/new/store', [BookingController::class, 'store'])->name('new.booking.store');
         Route::get('location', [LocationController::class, 'index'])->name('location');
 });
 
