@@ -159,4 +159,17 @@ class BookingController extends Controller
     {
         //
     }
+
+    /**
+     * Refund process controllers
+     */
+    public function refundRequestIndex(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($user->hasRole('admin')) {
+            return Inertia::render('admin/bookings/refund/RefundRequest', [
+            ]);
+        }
+    }
 }

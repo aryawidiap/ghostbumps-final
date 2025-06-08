@@ -28,7 +28,7 @@ class LocationController extends Controller
         }
 
         if ($user->hasRole('admin')) {
-            return Inertia::render('admin/locations/Index', [
+            return Inertia::render('admin/locations/AllLocations', [
                 'locations' => Location::all()
             ]);
         }
@@ -39,10 +39,10 @@ class LocationController extends Controller
      */
     public function create()
     {
+        $user = Auth::user();
+
         if ($user->hasRole('admin')) {
-            return Inertia::render('admin/locations/Index', [
-                'locations' => Location::all()
-            ]);
+            return Inertia::render('admin/locations/Create', []);
         }
     }
 
@@ -51,6 +51,8 @@ class LocationController extends Controller
      */
     public function store(Request $request)
     {
+        $user = Auth::user();
+
         if ($user->hasRole('admin')) {
             return Inertia::render('admin/locations/Index', [
                 'locations' => Location::all()
@@ -63,9 +65,11 @@ class LocationController extends Controller
      */
     public function show(Location $location)
     {
+        $user = Auth::user();
+
         if ($user->hasRole('admin')) {
-            return Inertia::render('admin/locations/Index', [
-                'locations' => Location::all()
+            return Inertia::render('admin/locations/Show', [
+                'location' => $location
             ]);
         }
     }
@@ -75,9 +79,11 @@ class LocationController extends Controller
      */
     public function edit(Location $location)
     {
+        $user = Auth::user();
+
         if ($user->hasRole('admin')) {
-            return Inertia::render('admin/locations/Index', [
-                'locations' => Location::all()
+            return Inertia::render('admin/locations/Edit', [
+                'location' => $location
             ]);
         }
     }
@@ -87,6 +93,7 @@ class LocationController extends Controller
      */
     public function update(Request $request, Location $location)
     {
+        $user = Auth::user();
         if ($user->hasRole('admin')) {
             return Inertia::render('admin/locations/Index', [
                 'locations' => Location::all()
@@ -99,10 +106,9 @@ class LocationController extends Controller
      */
     public function destroy(Location $location)
     {
+        $user = Auth::user();
         if ($user->hasRole('admin')) {
-            return Inertia::render('admin/locations/Index', [
-                'locations' => Location::all()
-            ]);
+            // add deleted_at on location
         }
     }
 }

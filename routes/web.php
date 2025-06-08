@@ -34,7 +34,7 @@ Route::middleware(['auth', 'verified', 'role:customer']) // TODO: add role middl
         Route::get('bookings/new/number-of-person', [BookingController::class, 'createNumberOfPerson'])->name('new.number-of-person');
         Route::get('bookings/new/confirm-details', [BookingController::class, 'createConfirmDetails'])->name('new.confirm-details');
         Route::post('bookings/new/store', [BookingController::class, 'store'])->name('new.booking.store');
-        Route::get('location', [LocationController::class, 'index'])->name('location');
+        Route::get('locations', [LocationController::class, 'index'])->name('locations');
 });
 
 Route::middleware(['auth', 'verified', 'role:admin']) // TODO: add role middleware
@@ -43,12 +43,18 @@ Route::middleware(['auth', 'verified', 'role:admin']) // TODO: add role middlewa
     ->group(function () {
         Route::resource('bookings', BookingController::class)
             ->only(['index', 'store', 'create', 'show', 'edit', 'update']);
-        Route::get('bookings/new/', [BookingController::class, 'create'])->name('bookings.new');
 
-        Route::get('location', [LocationController::class, 'index'])->name('location');
+        Route::get('locations', [LocationController::class, 'index'])->name('locations');
 
         Route::resource('locations', LocationController::class)
-            ->only(['index', 'store', 'create', 'edit', 'update']);
+            ->only(['index', 'store', 'show', 'create', 'edit', 'update']);
+        
+        Route::name('bookings.')
+        ->prefix('bookings')
+        ->group(function () {
+            Route::get('new', [BookingController::class, 'create'])->name('new');
+            Route::get('refund-requests', [BookingController::class, 'refundRequestsIndex'])->name('refund-requests.index');
+        });
 });
 
 
