@@ -798,6 +798,7 @@ import { Head, Link } from '@inertiajs/vue3';
                         class="absolute inset-0 rounded-t-lg shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] lg:overflow-hidden lg:rounded-r-lg lg:rounded-t-none"
                     />
                 </div>
+                <!-- Put the code in here -->
             </main>
         </div>
         <div class="h-14.5 hidden lg:block"></div>
