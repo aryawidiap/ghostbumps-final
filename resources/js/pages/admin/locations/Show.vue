@@ -3,6 +3,7 @@ import PlaceholderPattern from '@/components/PlaceholderPattern.vue';
 import AppLayout from '@/layouts/admin/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
+import { router } from '@inertiajs/vue3';
 
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -10,27 +11,62 @@ const breadcrumbs: BreadcrumbItem[] = [
         title: 'Dashboard',
         href: '/dashboard',
     },
+    { 
+        title: 'Location', 
+        href: '/admin/locations' 
+    },
+    { 
+        title: 'Details', 
+        href: '#' 
+    },
 ];
+
+defineProps(['location']);
+
+function editLocation(location: any) {
+    router.visit(route('admin.locations.edit', location));
+}
+
 </script>
 
 <template>
+
     <Head title="Show Location" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-            <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-                <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                    <PlaceholderPattern />
+            <div class="bg-black text-white font-['Special_Elite'] w-full min-h-screen">
+                <div class="w-full px-4 py-10">
+                    <div class="text-3xl font-bold mb-2">Location details: {{ location.name }}</div>
+                    <div class="flex flex-1 flex-col gap-4">
+                        <div class="bg-red-900 rounded-3xl overflow-hidden md:flex shadow-lg mb-6 font-['Oswald']">
+                            <div class="md:w-1/2">
+                                <!-- TODO: change the src to location:photo_path -->
+                                <img src="/img/table-tennis-1428052_1920.jpg" alt="Ghostbumps Denpasar"
+                                    class="w-full h-full object-cover" />
+                            </div>
+                            <div class="md:w-1/2 p-8">
+                                <p class="text-base text-yellow-100">Location Name</p>
+                                <h2 class="text-4xl font-bold font-['Special_Elite'] mt-2">{{ location.name }}</h2>
+
+                                <p class="text-base text-yellow-100 mt-4">Location Address</p>
+                                <p class="text-lg font-light">{{ location.address }}</p>
+
+                                <p class="text-base text-yellow-100 mt-4">Description</p>
+                                <p class="text-lg font-light leading-relaxed">
+                                    {{ location.description }}
+                                </p>
+
+                                <p class="text-base text-yellow-100 mt-4">Short Description</p>
+                                <p class="text-lg font-light leading-relaxed">
+                                    {{ location.short_description }}
+                                </p>
+                                <button @click="editLocation(location)"
+                                    class="mt-4 bg-white text-red-800 px-2 py-1 rounded">Edit</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                    <PlaceholderPattern />
-                </div>
-                <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                    <PlaceholderPattern />
-                </div>
-            </div>
-            <div class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border md:min-h-min">
-                <PlaceholderPattern />
             </div>
         </div>
     </AppLayout>
