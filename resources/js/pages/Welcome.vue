@@ -5,6 +5,8 @@ import { Head, Link } from '@inertiajs/vue3';
 const showJumpscare = ref(false);
 const jumpscareAudio = new Audio('/sounds/scream.mp3');
 
+defineProps(['topLocations']);
+
 const triggerJumpscare = () => {
     showJumpscare.value = true;
     jumpscareAudio.play();
@@ -16,84 +18,111 @@ const triggerJumpscare = () => {
 onMounted(() => {
     setTimeout(triggerJumpscare, 8000); // Trigger automatically after 8s
 });
+
+function getImageSrc(path: string) {
+  // Normalize the path
+  return '/' + path.replace(/^\/+|\/+$/g, '').replace(/\/{2,}/g, '/')
+}
+
 </script>
 
-<template>
+<template class="bg-black-100">
 
-    <Head title="Ghostbumps" />
+    <Head title="Welcome" />
 
-    <main
-        class="min-h-screen bg-black text-white font-['Special_Elite'] space-y-20 p-6 lg:p-12 relative overflow-hidden">
-        <!-- Jumpscare Overlay -->
-        <div v-if="showJumpscare"
-            class="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center animate-jumpscare">
-            <img src="/images/jumpscare.png" alt="Jumpscare" class="max-h-full max-w-full" />
-        </div>
+    <div
+        class="flex min-h-screen flex-col items-center p-6 dark:bg-[#0a0a0a] lg:justify-center lg:p-8">
+        <header class="not-has-[nav]:hidden mb-6 w-full max-w-[335px] text-sm lg:max-w-4xl">
+            <nav class="flex items-center justify-end gap-4 bg-black text-white font-['Special_Elite'] text-2xl">
+                <Link v-if="$page.props.auth.user" :href="route('dashboard')"
+                    class="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal border-[#3E3E3A] text-[#EDEDEC] hover:border-[#62605b] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]">
+                Dashboard
+                </Link>
+                <template v-else>
+                    <Link :href="route('home')"
+                        class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]">
+                    Home
+                    </Link>
+                    <Link :href="route('locations')"
+                        class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]">
+                    Locations
+                    </Link>
+                    <Link :href="route('login')"
+                        class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]">
+                    Buy Tickets
+                    </Link>
+                    <Link :href="route('login')"
+                        class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]">
+                    Log in
+                    </Link>
+                    <Link :href="route('register')"
+                        class="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]">
+                    Register
+                    </Link>
+                </template>
+            </nav>
+        </header>
 
-        <!-- Header -->
-        <!-- Header -->
-        <section class="min-h-[70vh] flex flex-col items-center justify-center text-center">
-            <h1 class="text-3xl lg:text-5xl mb-2">GHOSTBUMPS</h1>
-            <p class="text-sm">it is not just a creepy house.<br />it is a story to tell.</p>
-        </section>
-
-        <!-- Date & Intro -->
-        <section class="min-h-[70vh] flex flex-col items-center justify-center text-center">
-            <h2 class="text-xl">2025/02/25</h2>
-            <p class="text-lg">I found this abandoned house.<br />It’s luring me in.</p>
-        </section>
-
-        <!-- Dark Voice -->
-        <section class="min-h-[70vh] flex items-center justify-center text-center">
-            <p class="text-lg italic">Something was calling for me in the dark...</p>
-        </section>
-
-        <!-- Jumpscare Trigger Text -->
-        <section class="min-h-[70vh] flex items-center justify-center text-center">
-            <p class="text-lg italic text-red-500 cursor-pointer" @click="triggerJumpscare">
-                (click me... if you dare)
-            </p>
-        </section>
-
-        <!-- Curiosity -->
-        <section class="min-h-[70vh] flex items-center justify-center text-center">
-            <p class="text-lg">I was running. But, my curiosity won.</p>
-        </section>
-
-        <!-- HELP -->
-        <section class="min-h-[70vh] flex items-center justify-center text-center">
-            <h1 class="text-5xl tracking-widest text-red-500">H E L P</h1>
-        </section>
-
-        <!-- Footer -->
-        <section class="min-h-[70vh] flex flex-col items-center justify-center text-center space-y-4">
-            <p>continue the story</p>
-            <h2 class="text-lg underline">Known Spawn Locations</h2>
-            <div class="grid grid-cols-1 gap-4 md:grid-cols-3 justify-items-center text-sm text-gray-400">
-                <div>
-                    <img src="" alt="" class="h-16 w-16 bg-gray-800 mb-1" />
-                    <h3>GHOSTBUMPS Jogja</h3>
-                </div>
-                <div>
-                    <img src="" alt="" class="h-16 w-16 bg-gray-800 mb-1" />
-                    <h3>GHOSTBUMPS Surabaya</h3>
-                </div>
-                <div>
-                    <img src="" alt="" class="h-16 w-16 bg-gray-800 mb-1" />
-                    <h3>GHOSTBUMPS Denpasar</h3>
-                </div>
+        <main
+            class="min-h-screen w-full bg-black text-white font-['Special_Elite'] space-y-20 p-6 lg:p-12 relative overflow-hidden">
+            <!-- Jumpscare Overlay -->
+            <div v-if="showJumpscare"
+                class="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center animate-jumpscare">
+                <img src="/images/jumpscare.png" alt="Jumpscare" class="max-h-full max-w-full" />
             </div>
-        </section>
+
+            <!-- Header -->
+            <!-- Header -->
+            <section class="min-h-[70vh] flex flex-col items-center justify-center text-center">
+                <h1 class="text-6xl lg:text-6xl mb-2">GHOSTBUMPS</h1>
+                <p class="text-lg font-[Oswald]">it is not just a creepy house.<br />it is a story to tell.</p>
+            </section>
+
+            <!-- Date & Intro -->
+            <section class="min-h-[70vh] flex flex-col items-center justify-center text-center">
+                <h2 class="text-5xl">2025/02/25</h2>
+                <p class="text-5xl">I found this abandoned house.<br />It’s luring me in.</p>
+            </section>
+
+            <!-- Dark Voice -->
+            <section class="min-h-[70vh] flex items-center justify-center text-center">
+                <p class="text-5xl italic">Something was calling for me in the dark...</p>
+            </section>
+
+            <!-- Jumpscare Trigger Text -->
+            <section class="min-h-[70vh] flex items-center justify-center text-center">
+                <p class="text-lg italic text-red-500 cursor-pointer" @click="triggerJumpscare">
+                    (click me... if you dare)
+                </p>
+            </section>
+
+            <!-- Curiosity -->
+            <section class="min-h-[70vh] flex items-center justify-center text-center">
+                <p class="text-5xl">I was running. But, my curiosity won.</p>
+            </section>
+
+            <!-- HELP -->
+            <section class="min-h-[70vh] flex items-center justify-center text-center">
+                <h1 class="text-9xl tracking-widest starting:text-white text-red-900 transition delay-150 duration-500 ease-in-out">H  E  L  P</h1>
+            </section>
+
+            <!-- Footer -->
+            <section class="min-h-[70vh] flex flex-col items-center justify-center text-center space-y-4">
+                <p class="text-lg">continue the story</p>
+                <h2 class="text-5xl">Known Spawn Locations</h2>
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-3 justify-items-center text-lg text-gray-400">
+                    <div v-for="location in topLocations" v-bind:key="location.id">
+                        <img :src="getImageSrc(location.photo_path)" alt="" class="h-16 w-16 bg-gray-800 mb-1" />
+                        <h3>{{ location.name }}</h3>
+                        <p>{{ location.short_description }}</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <div class="h-14.5 hidden lg:block"></div>
+    </div>
 
 
-        <!-- Optional Navigation -->
-        <nav class="text-center mt-10">
-            <Link :href="route('home')" class="mx-2 hover:underline">Home</Link>
-            <Link :href="route('locations')" class="mx-2 hover:underline">Locations</Link>
-            <Link :href="route('login')" class="mx-2 hover:underline">Buy Tickets</Link>
-            <Link :href="route('register')" class="mx-2 hover:underline">Register</Link>
-        </nav>
-    </main>
 </template>
 
 <style scoped>

@@ -3,12 +3,15 @@
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\LocationController;
 use App\Models\Booking;
+use App\Models\Location;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome');
+    return Inertia::render('Welcome', [
+        'topLocations' => Location::all()->take(3)
+    ]);
 })->name('home');
 
 Route::get('locations', [LocationController::class, 'index'])->name('locations');
