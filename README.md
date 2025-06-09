@@ -78,11 +78,14 @@ nvm use 24.1.0
 
 ### Run the server and the app
 
+If change in npm packages
+
 ```cmd
 npm install
-npm run dev
+```
+
+```cmd
 composer run dev
-php -d variables_order=GPCS artisan serve --port=8000
 ```
 
 If error `cannot run script in this machine`
