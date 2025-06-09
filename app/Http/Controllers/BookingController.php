@@ -136,7 +136,7 @@ class BookingController extends Controller
                 'number_of_persons' => ['required', 'int', 'max:10', 'min:1'],
             ]);
 
-            var_dump($validated);
+            // var_dump($validated);
             $bookingDate = Carbon::parse($validated['date'])->format('Y-m-d H:i:s');
             $bookingTicket = $user->bookings()->create(
                 [
