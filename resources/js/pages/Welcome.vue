@@ -1,135 +1,127 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue';
 import { Head, Link } from '@inertiajs/vue3';
+
+const showJumpscare = ref(false);
+const jumpscareAudio = new Audio('/sounds/scream.mp3');
+
+const triggerJumpscare = () => {
+    showJumpscare.value = true;
+    jumpscareAudio.play();
+    setTimeout(() => {
+        showJumpscare.value = false;
+    }, 1500); // Hide after 1.5 seconds
+};
+
+onMounted(() => {
+    setTimeout(triggerJumpscare, 8000); // Trigger automatically after 8s
+});
 </script>
 
 <template>
 
-    <Head title="Welcome">
-        <link rel="preconnect" href="https://rsms.me/" />
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-    </Head>
-    <div
-        class="flex min-h-screen flex-col items-center bg-[#FDFDFC] p-6 text-[#1b1b18] dark:bg-[#0a0a0a] lg:justify-center lg:p-8">
-        <header class="not-has-[nav]:hidden mb-6 w-full max-w-[335px] text-sm lg:max-w-4xl">
-            <nav class="flex items-center justify-end gap-4 bg-black text-white font-['Special_Elite'] text-2xl">
-                <Link v-if="$page.props.auth.user" :href="route('dashboard')"
-                    class="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]">
-                Dashboard
-                </Link>
-                <template v-else>
-                    <Link :href="route('home')"
-                        class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]">
-                    Home
-                    </Link>
-                    <Link :href="route('locations')"
-                        class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]">
-                    Locations
-                    </Link>
-                    <Link :href="route('login')"
-                        class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]">
-                    Buy Tickets
-                    </Link>
-                    <Link :href="route('login')"
-                        class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]">
-                    Log in
-                    </Link>
-                    <Link :href="route('register')"
-                        class="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]">
-                    Register
-                    </Link>
-                </template>
-            </nav>
-        </header>
+    <Head title="Ghostbumps" />
 
-        <div
-            class="duration-750 starting:opacity-0 flex w-full font-['Oswald'] items-center justify-center opacity-100 transition-opacity lg:grow">
-            <div class="flex w-full max-w-[335px] flex-col-reverse overflow-hidden rounded-lg lg:max-w-4xl lg:flex-row">
-                <div
-                    class="flex-1 rounded-bl-lg rounded-br-lg bg-white p-6 pb-12 text-[13px] leading-[20px] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:bg-[#161615] dark:text-[#EDEDEC] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] lg:rounded-br-none lg:rounded-tl-lg lg:p-20">
-                    <h1 class="mb-1 font-medium font-['Special Elite']">GHOSTBUMPS</h1>
-                    <p class="mb-2 text-[#706f6c] dark:text-[#A1A09A]">
-                        it is not just a creepy house.
-                    </p>
-                    <p class="mb-2 text-[#706f6c] dark:text-[#A1A09A]">
-                        it is a story to tell.
-                    </p>
+    <main
+        class="min-h-screen bg-black text-white font-['Special_Elite'] space-y-20 p-6 lg:p-12 relative overflow-hidden">
+        <!-- Jumpscare Overlay -->
+        <div v-if="showJumpscare"
+            class="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center animate-jumpscare">
+            <img src="/images/jumpscare.png" alt="Jumpscare" class="max-h-full max-w-full" />
+        </div>
+
+        <!-- Header -->
+        <!-- Header -->
+        <section class="min-h-[70vh] flex flex-col items-center justify-center text-center">
+            <h1 class="text-3xl lg:text-5xl mb-2">GHOSTBUMPS</h1>
+            <p class="text-sm">it is not just a creepy house.<br />it is a story to tell.</p>
+        </section>
+
+        <!-- Date & Intro -->
+        <section class="min-h-[70vh] flex flex-col items-center justify-center text-center">
+            <h2 class="text-xl">2025/02/25</h2>
+            <p class="text-lg">I found this abandoned house.<br />It’s luring me in.</p>
+        </section>
+
+        <!-- Dark Voice -->
+        <section class="min-h-[70vh] flex items-center justify-center text-center">
+            <p class="text-lg italic">Something was calling for me in the dark...</p>
+        </section>
+
+        <!-- Jumpscare Trigger Text -->
+        <section class="min-h-[70vh] flex items-center justify-center text-center">
+            <p class="text-lg italic text-red-500 cursor-pointer" @click="triggerJumpscare">
+                (click me... if you dare)
+            </p>
+        </section>
+
+        <!-- Curiosity -->
+        <section class="min-h-[70vh] flex items-center justify-center text-center">
+            <p class="text-lg">I was running. But, my curiosity won.</p>
+        </section>
+
+        <!-- HELP -->
+        <section class="min-h-[70vh] flex items-center justify-center text-center">
+            <h1 class="text-5xl tracking-widest text-red-500">H E L P</h1>
+        </section>
+
+        <!-- Footer -->
+        <section class="min-h-[70vh] flex flex-col items-center justify-center text-center space-y-4">
+            <p>continue the story</p>
+            <h2 class="text-lg underline">Known Spawn Locations</h2>
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-3 justify-items-center text-sm text-gray-400">
+                <div>
+                    <img src="" alt="" class="h-16 w-16 bg-gray-800 mb-1" />
+                    <h3>GHOSTBUMPS Jogja</h3>
+                </div>
+                <div>
+                    <img src="" alt="" class="h-16 w-16 bg-gray-800 mb-1" />
+                    <h3>GHOSTBUMPS Surabaya</h3>
+                </div>
+                <div>
+                    <img src="" alt="" class="h-16 w-16 bg-gray-800 mb-1" />
+                    <h3>GHOSTBUMPS Denpasar</h3>
                 </div>
             </div>
-        </div>
-        <div
-            class="duration-750 starting:opacity-0 flex w-full font-['Oswald'] items-center justify-center opacity-100 transition-opacity lg:grow">
-            <div class="flex w-full max-w-[335px] flex-col-reverse overflow-hidden rounded-lg lg:max-w-4xl lg:flex-row">
-                <div
-                    class="flex-1 rounded-bl-lg rounded-br-lg bg-white p-6 pb-12 text-[13px] leading-[20px] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:bg-[#161615] dark:text-[#EDEDEC] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] lg:rounded-br-none lg:rounded-tl-lg lg:p-20">
-                    <h2 class="mb-1 font-medium font-['Special Elite']">2025/02/25</h2>
-                    <p class="mb-2 text-[#706f6c] dark:text-[#A1A09A]">
-                        I found this abandoned house. <br />
-                        It’s luring me in.
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div
-            class="duration-750 starting:opacity-0 flex w-full font-['Oswald'] items-center justify-center opacity-100 transition-opacity lg:grow">
-            <div class="flex w-full max-w-[335px] flex-col-reverse overflow-hidden rounded-lg lg:max-w-4xl lg:flex-row">
-                <div
-                    class="flex-1 rounded-bl-lg rounded-br-lg bg-white p-6 pb-12 text-[13px] leading-[20px] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:bg-[#161615] dark:text-[#EDEDEC] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] lg:rounded-br-none lg:rounded-tl-lg lg:p-20">
-                    <p class="mb-2 text-[#706f6c] dark:text-[#A1A09A]">
-                        Something was calling for me in the dark...
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div
-            class="duration-750 starting:opacity-0 flex w-full font-['Oswald'] items-center justify-center opacity-100 transition-opacity lg:grow">
-            <div class="flex w-full max-w-[335px] flex-col-reverse overflow-hidden rounded-lg lg:max-w-4xl lg:flex-row">
-                <div
-                    class="flex-1 rounded-bl-lg rounded-br-lg bg-white p-6 pb-12 text-[13px] leading-[20px] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:bg-[#161615] dark:text-[#EDEDEC] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] lg:rounded-br-none lg:rounded-tl-lg lg:p-20">
-                    <p class="mb-2 text-[#706f6c] dark:text-[#A1A09A]">
-                        I was running. But, my curiosity won.
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div
-            class="duration-750 starting:opacity-0 flex w-full font-['Oswald'] items-center justify-center opacity-100 transition-opacity lg:grow">
-            <div class="flex w-full max-w-[335px] flex-col-reverse overflow-hidden rounded-lg lg:max-w-4xl lg:flex-row">
-                <div
-                    class="flex-1 rounded-bl-lg rounded-br-lg bg-white p-6 pb-12 text-[13px] leading-[20px] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:bg-[#161615] dark:text-[#EDEDEC] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] lg:rounded-br-none lg:rounded-tl-lg lg:p-20">
-                    <p class="mb-2 text-[#706f6c] dark:text-[#A1A09A]">
-                        H E L P
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div
-            class="duration-750 starting:opacity-0 flex w-full font-['Oswald'] items-center justify-center opacity-100 transition-opacity lg:grow">
-            <div class="flex w-full max-w-[335px] flex-col-reverse overflow-hidden rounded-lg lg:max-w-4xl lg:flex-row">
-                <div
-                    class="flex-1 rounded-bl-lg rounded-br-lg bg-white p-6 pb-12 text-[13px] leading-[20px] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:bg-[#161615] dark:text-[#EDEDEC] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] lg:rounded-br-none lg:rounded-tl-lg lg:p-20">
-                    <p class="mb-2 text-[#706f6c] dark:text-[#A1A09A]">
-                        continue the story
-                    </p>
-                    <h2 class="mb-2 text-[#706f6c] dark:text-[#A1A09A]">
-                        Known Spawn Locations
-                    </h2>
-                    <div>
-                        <div>
-                            <img src="" alt="">
-                            <h3>GHOSTBUMPS Jogja</h3>
-                        </div>
-                        <div>
-                            <img src="" alt="">
-                            <h3>GHOSTBUMPS Surabaya</h3>
-                        </div>
-                        <div>
-                            <img src="" alt="">
-                            <h3>GHOSTBUMPS Denpasar</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="h-14.5 hidden lg:block"></div>
-    </div>
+        </section>
+
+
+        <!-- Optional Navigation -->
+        <nav class="text-center mt-10">
+            <Link :href="route('home')" class="mx-2 hover:underline">Home</Link>
+            <Link :href="route('locations')" class="mx-2 hover:underline">Locations</Link>
+            <Link :href="route('login')" class="mx-2 hover:underline">Buy Tickets</Link>
+            <Link :href="route('register')" class="mx-2 hover:underline">Register</Link>
+        </nav>
+    </main>
 </template>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
+
+@keyframes jumpscare {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    20% {
+        transform: scale(1.3);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1);
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: scale(1.2);
+        opacity: 0;
+    }
+}
+
+.animate-jumpscare {
+    animation: jumpscare 1.5s ease-in-out forwards;
+}
+</style>
