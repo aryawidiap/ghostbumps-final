@@ -21,36 +21,35 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 // Refs to store localStorage values
 const date = ref('')
-const time = ref('')
-const persons = ref(1)
-const location_id = ref('')
+const time = ref(0)
+const number_of_persons = ref(1)
+const location_id = ref(-1)
 const location_name = ref('')
 
 // Setup localStorage values
 onMounted(() => {
     date.value = localStorage.getItem('selectedDate') || 'Unknown'
-    time.value = localStorage.getItem('selectedTime') || 'Unknown'
-    persons.value = parseInt(localStorage.getItem('persons') || '1')
-    location_id.value = localStorage.getItem('location_id') || ''
-    location_name.value = localStorage.getItem('location_name') || ''
+    time.value = parseInt(localStorage.getItem('selectedTime') || '0')
+    number_of_persons.value = parseInt(localStorage.getItem('persons') || '1')
+    location_id.value = parseInt(localStorage.getItem('locationId') || '-1') 
+    location_name.value = localStorage.getItem('locationName') || ''
 })
 
 // Inertia form
 const form = useForm({
     name: props.user.name,
     date: '',
-    time: '',
-    persons: 1,
-    location_id: '',
+    time: 0,
+    number_of_persons: 1,
+    location_id: -1,
     location_name: '',
 })
 
 function submitBooking() {
     form.date = date.value
     form.time = time.value
-    form.persons = persons.value
+    form.number_of_persons = number_of_persons.value
     form.location_id = location_id.value
-    form.location_name = location_name.value
 
     form.post(route('customer.new.booking.store'), {
         onSuccess: () => {
@@ -78,8 +77,8 @@ function submitBooking() {
                     <p><strong>Customer Name:</strong> {{ props.user.name }}</p>
                     <p><strong>Location:</strong> {{ location_name }}</p>
                     <p><strong>Date:</strong> {{ date }}</p>
-                    <p><strong>Time:</strong> {{ time }}</p>
-                    <p><strong>Number of Person(s):</strong> {{ persons }} person(s)</p>
+                    <p><strong>Time:</strong> {{ time }}.00 - {{ time + 1 }}.00</p>
+                    <p><strong>Number of Person(s):</strong> {{ number_of_persons }} person(s)</p>
 
                     <button
                         class="mt-6 bg-white text-red-800 px-4 py-2 rounded hover:bg-red-100 w-full"

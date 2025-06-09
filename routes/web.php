@@ -15,12 +15,22 @@ Route::get('locations', [LocationController::class, 'index'])->name('locations')
 
 Route::get('dashboard', function () {
     $user = Auth::user();
+
     if ($user->hasRole('admin')) {
-        return Inertia::render('admin/Dashboard');
-    } else if ($user->hasRole('admin')) {
-        return Inertia::render('Dashboard');
+        return Inertia::render('admin/Dashboard', [
+            'user' => $user
+        ]);
+    } 
+    
+    if ($user->hasRole('customer')) {
+        return Inertia::render('Dashboard', [
+            'user' => $user,
+            'logbook' => $user->bookings()
+        ]);
     }
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+
 
 Route::middleware(['auth', 'verified', 'role:customer']) // TODO: add role middleware
     ->name('customer.')
@@ -34,6 +44,7 @@ Route::middleware(['auth', 'verified', 'role:customer']) // TODO: add role middl
         Route::get('bookings/new/number-of-person', [BookingController::class, 'createNumberOfPerson'])->name('new.number-of-person');
         Route::get('bookings/new/confirm-details', [BookingController::class, 'createConfirmDetails'])->name('new.confirm-details');
         Route::post('bookings/new/store', [BookingController::class, 'store'])->name('new.booking.store');
+        Route::get('bookings/new/confirmed/{confirmedBooking}', [BookingController::class, 'confirmed'])->name('bookings.new.confirmed');
         Route::get('locations', [LocationController::class, 'index'])->name('locations');
 });
 

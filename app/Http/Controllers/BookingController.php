@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Models\Location;
+use App\Rules\ValidLocation;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
@@ -59,7 +61,7 @@ class BookingController extends Controller
 
         if ($user->hasRole('customer')) {
             return Inertia::render('bookings/new/SelectDate', [
-                'locations' => $location
+                'location' => $location
             ]);
         }
     }
@@ -124,6 +126,49 @@ class BookingController extends Controller
     public function store(Request $request)
     {
         //
+        $user = Auth::user();
+
+        if ($user->hasRole('customer')) {
+            $validated = $request->validate([
+                'location_id' => ['required', 'int', new ValidLocation],
+                'date' => ['required', 'date', 'max:255'],
+                'time' => ['required', 'int', 'min:10', 'max:20'],
+                'number_of_persons' => ['required', 'int', 'max:10', 'min:1'],
+            ]);
+
+            var_dump($validated);
+            $bookingDate = Carbon::parse($validated['date'])->format('Y-m-d H:i:s');
+            $bookingTicket = $user->bookings()->create(
+                [
+                    'location_id' => $validated['location_id'],
+                    'booking_date' => $bookingDate,
+                    'booking_hour' => $validated['time'],
+                    'number_of_persons' => $validated['number_of_persons'],
+                    'status' => 'confirmed',
+                ]
+            );
+            // return Inertia::render('bookings/new/Confirmed', [
+            //     'confirmedTicket' => $bookingTicket
+            // ]);
+
+            return redirect(route('customer.bookings.new.confirmed', $bookingTicket));
+        }
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function confirmed(Booking $confirmedBooking)
+    {
+        //
+        $user = Auth::user();
+
+        if ($user->hasRole('customer')) {
+            return Inertia::render('bookings/new/Confirmed', [
+                'confirmedTicket' => $confirmedBooking,
+                'customerName' => $user->name
+            ]);
+        }
     }
 
     /**

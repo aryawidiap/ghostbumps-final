@@ -23,29 +23,22 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
-        ])->each(function ($user) {
-            $user->assignRole('customer');
-        });
+        ])->assignRole('customer');
 
         User::factory()->create([
             'name' => 'Super Admin',
             'email' => 'super@example.com',
-        ])->each(function ($user) {
-            $user->assignRole('Super Admin');
-        });
+        ])->assignRole('Super Admin');
 
         User::factory()->create([
             'name' => 'Admin',
             'email' => 'admin@example.com',
-        ])->each(function ($user) {
-            $user->assignRole('admin');
-        });
+        ])->assignRole('admin');
 
         User::factory()->create([
             'name' => 'Employee',
             'email' => 'employee@example.com',
-        ])->each(function ($user) {
-            $user->assignRole('employee');
-        });
+        ])->assignRole('employee');
+    
     }
 }

@@ -32,6 +32,7 @@ const showDropdown = ref(false)
 const toggleDropdown = () => {
     showDropdown.value = !showDropdown.value
 }
+
 </script>
 
 <style scoped>

@@ -26,12 +26,13 @@ const breadcrumbs: BreadcrumbItem[] = [
 ]
 
 const date = ref(new Date());
-let isDateSelected = false;
+const time = ref(0);
+const isDateSelected = ref(false);
 
 const availableTimes = ref([]);
 const getAvailableTime = () => {
-    if (!isDateSelected) {
-        isDateSelected = true;
+    if (!isDateSelected.value) {
+        isDateSelected.value = true;
     }
     console.log(date)
     console.log(date.value.getUTCDate())
@@ -45,13 +46,17 @@ const getAvailableTime = () => {
 }
 
 
-defineProps(['location']);
+const props = defineProps(['location']);
 
 const form = reactive({
     first_name: null,
     last_name: null,
     email: null,
 })
+
+const locationId = ref(props.location.id);
+const locationName = ref(props.location.name);
+
 
 function submit() {
     router.post('/', form)
@@ -64,10 +69,20 @@ function selectDate(date) {
   selectedDate.value = date
 }
 
+const rules = ref({
+  hours: 0,
+  minutes: 0,
+  seconds: 0,
+  milliseconds: 0,
+});
+
 function nextStep() {
   if (selectedDate.value) {
-    localStorage.setItem('selectedDate', selectedDate.value)
-    router.visit('/bookings/new/number-of-person')
+    localStorage.setItem('selectedDate', date.value.toUTCString())
+    localStorage.setItem('selectedTime', time.value.toString())
+    localStorage.setItem('locationId', locationId.value)
+    localStorage.setItem('locationName', locationName.value)
+    router.visit('/customer/bookings/new/number-of-person')
   }
 }
 </script>
@@ -90,7 +105,7 @@ function nextStep() {
                     </div>
                     <div class="bg-red-900 rounded-3xl overflow-hidden mb-6 md:flex shadow-lg">
                         <!-- TODO: center these -->
-                        <VDatePicker v-model="date" :min-date="new Date()" class="" @dayclick="getAvailableTime" />
+                        <VDatePicker v-model="date" :min-date="new Date()" :rules="rules" class="" @dayclick="getAvailableTime" />
                         <!-- fetch time data using Axios -->
 
                         <!-- Show if date is selected -->
@@ -104,7 +119,7 @@ function nextStep() {
                                     <li v-for="availableTime in availableTimes" :key="availableTime.time"
                                         :class="{ 'bg-white': !availableTime.isAvailable }">
                                         <input type="radio" :id="availableTime.time" name="time"
-                                            :value="availableTime.time">
+                                            :value="availableTime.time" v-model="time">
                                         <label :for="availableTime.time">{{ availableTime.time }}.00 - {{
                                             availableTime.time + 1 }}.00</label>
                                     </li>

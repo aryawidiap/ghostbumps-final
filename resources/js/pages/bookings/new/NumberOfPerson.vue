@@ -14,18 +14,20 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 defineProps(['bookings']);
 
+const location = ref('');
 const date = ref('');
 const time = ref('');
 const persons = ref(1);
 
 onMounted(() => {
+    location.value = localStorage.getItem('locationName') || 'Unknown';
     date.value = localStorage.getItem('selectedDate') || 'Unknown';
     time.value = localStorage.getItem('selectedTime') || 'Unknown';
 });
 
 function nextStep() {
     localStorage.setItem('persons', persons.value.toString());
-    router.visit('/bookings/new/confirm-details');
+    router.visit('/customer/bookings/new/confirm-details');
 }
 </script>
 <style scoped>
@@ -45,42 +47,30 @@ function nextStep() {
                         Please select the location to be visited.
                     </div>
 
-                    <!-- Location Card -->
-                    <div class="bg-red-900 rounded-3xl overflow-hidden mb-6 md:flex shadow-lg">
-                        <div class="md:w-1/2">
-                            <img src="house.jpg" alt="Ghostbumps Denpasar" class="w-full h-full object-cover" />
-                        </div>
-                        <div class="md:w-1/2 p-8 space-y-4">
-                            <h2 class="text-2xl font-bold font-['Special_Elite']">Ghostbumps Denpasar</h2>
-                            <p class="italic text-sm">Jl. Seram No.123, Denpasar</p>
-                            <p class="text-sm leading-relaxed">
-                                Experience the thrill of a haunted house adventure in the heart of Bali. Choose your
-                                time and number of persons below.
-                            </p>
+                    <!-- Booking Summary -->
+                    <div class="min-h-screen bg-red-900 flex flex-col items-center justify-center text-white rounded-xl p-6">
+                        <div class="bg-red-700 p-6 rounded-lg w-[90%] max-w-md">
+                            <h2 class="font-semibold">Location</h2>
+                            <p class="text-4xl">{{ location }}</p>
+                            <h2 class="font-semibold mt-4">Date & Time</h2>
+                            <p class="text-2xl font-['Oswald']">{{ date }}</p>
+                            <p class="text-2xl font-['Oswald']"> {{ time }}.00 - {{ parseInt(time)+1 }}.00</p>
+                            <div class="mt-4">
+                                <label for="persons" class="block mb-2">Number of Person(s):</label>
+                                <input id="persons" type="number" v-model="persons" min="1" max="6"
+                                    class="appearance-none text-center text-red-800 font-bold w-20 h-12 rounded-md bg-white shadow-md" />
+
+                            </div>
+                            <button @click="nextStep"
+                                class="mt-6 bg-white text-red-800 px-4 py-2 rounded hover:bg-red-100 w-full">
+                                Next
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Booking Summary -->
-            <div class="min-h-screen bg-red-800 flex flex-col items-center justify-center text-white rounded-xl p-6">
-                <div class="bg-red-700 p-6 rounded-lg w-[90%] max-w-md">
-                    <h2 class="text-2xl font-semibold mb-4">Location :</h2>
-                    <p>Ghostbumps Denpasar</p>
-                    <h2 class="text-2xl font-semibold mb-4">Date & Time:</h2>
-                    <p>{{ date }} {{ time }}</p>
-                    <div class="mt-4">
-                        <label for="persons" class="block mb-2">Number of Person(s):</label>
-                        <input id="persons" type="number" v-model="persons" min="1" max="6"
-                            class="appearance-none text-center text-red-800 font-bold w-20 h-12 rounded-md bg-white shadow-md" />
-
-                    </div>
-                    <button @click="nextStep"
-                        class="mt-6 bg-white text-red-800 px-4 py-2 rounded hover:bg-red-100 w-full">
-                        Next
-                    </button>
-                </div>
-            </div>
+            
         </div>
     </AppLayout>
 </template>

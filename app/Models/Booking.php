@@ -14,9 +14,11 @@ class Booking extends Model
      * @var list<string>
      */
     protected $fillable = [
+        'location_id',
         'customer_name',
         'booking_date',
         'booking_hour',
+        'number_of_persons',
         'status'
     ];
 

@@ -46,12 +46,12 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Location',
-        href: '/location',
+        href: '/customer/locations',
         icon: LayoutGrid,
     },
     {
         title: 'My Tickets',
-        href: '/bookings',
+        href: '/customer/bookings',
         icon: LayoutGrid,
     },
 ];

@@ -11,7 +11,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-const userName = 'Gendhis'
+defineProps(['user', 'logbook', 'nextExperiences', 'visitedLocation', 'unvisitedLocation']);
 
 const nextExperience = {
   name: 'Ghostbumps Denpasar',
@@ -19,11 +19,6 @@ const nextExperience = {
   time: '13.00 – 14.00'
 }
 
-const logbook = [
-  { name: 'Ghostbumps Denpasar', date: '14 April 2024', time: '13.00 – 14.00' },
-  { name: 'Ghostbumps Jogja', date: '10 April 2024', time: '13.00 – 14.00' },
-  { name: 'Ghostbumps Denpasar', date: '8 April 2024', time: '13.00 – 14.00' }
-]
 
 const revisit = [
   { name: 'Ghostbumps Denpasar', description: 'Discover eda ngaden awak bisa depang anake ngadanin' },
@@ -44,7 +39,7 @@ const newAdventures = [
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <div class="min-h-screen bg-[#120b0b] text-white font-mono p-6">
-                <h1 class="text-3xl font-bold mb-6">Welcome Back, {{ userName }}.</h1>
+                <h1 class="text-3xl font-bold mb-6">Welcome Back, {{ user.name }}.</h1>
 
                 <!-- Next Experience and Logbook -->
                 <div class="grid md:grid-cols-2 gap-6 mb-10">
@@ -64,9 +59,9 @@ const newAdventures = [
                     <!-- Logbook -->
                     <div>
                         <h2 class="text-xl mb-2">Your logbook</h2>
-                        <div v-for="log in logbook" :key="log.date" class="bg-gray-300 text-black p-4 rounded-lg mb-2">
-                            <p class="font-semibold text-lg">{{ log.name }}</p>
-                            <p>{{ log.date }} | {{ log.time }}</p>
+                        <div v-for="booking in logbook" :key="booking.date" class="bg-gray-300 text-black p-4 rounded-lg mb-2">
+                            <p class="font-semibold text-lg">{{ booking.location_id }}</p>
+                            <p>{{ booking.booking_date }} | {{ booking.booking_hour }}</p>
                         </div>
                     </div>
                 </div>
