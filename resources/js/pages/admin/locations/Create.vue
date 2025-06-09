@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/admin/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import { ref, reactive } from 'vue';
 import { router } from '@inertiajs/vue3';
+import InputError from '@/components/InputError.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/' },
@@ -12,28 +13,34 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 // Set initial values in the reactive object
-const form = reactive({
+const form = useForm({
+    photo: '',
     name: '',
     address: '',
     description: '',
-    shortDescription: '',
+    short_description: '',
 });
 
 // Explicitly type the ref for an input element
 const fileInput = ref<HTMLInputElement | null>(null);
 
+const changePhoto = (e: any) => {
+    form.photo = e.target.files[0];
+};
+
 function submitForm() {
-    const formData = new FormData();
-    formData.append('name', form.name);
-    formData.append('address', form.address);
-    formData.append('description', form.description);
-    formData.append('shortDescription', form.shortDescription);
-    if (fileInput.value?.files && fileInput.value.files[0]) {
-        formData.append('image', fileInput.value.files[0]);
-    }
-    router.post(route('admin.locations.store'), formData, {
-        forceFormData: true,
-    });
+    // const formData = new FormData();
+    // formData.append('name', form.name);
+    // formData.append('address', form.address);
+    // formData.append('description', form.description);
+    // formData.append('short_description', form.shortDescription);
+    // if (fileInput.value?.files && fileInput.value.files[0]) {
+    //     formData.append('image', fileInput.value.files[0]);
+    // }
+    // router.post(route('admin.locations.store'), formData, {
+    //     forceFormData: true,
+    // });
+    form.post(route('admin.locations.store'));
 }
 </script>
 
@@ -54,27 +61,32 @@ function submitForm() {
                             <form @submit.prevent="submitForm" class="space-y-4">
                                 <div>
                                     <label class="block mb-2">Location Image</label>
-                                    <input type="file" ref="fileInput" class="w-full p-2 bg-white text-black rounded">
+                                    <input type="file" ref="fileInput" class="w-full p-2 bg-white text-black rounded" @input="changePhoto">
+                                    <InputError class="mt-2" :message="form.errors.photo" />
                                 </div>
                                 <div>
                                     <label class="block mb-2">Name</label>
                                     <input type="text" v-model="form.name"
                                         class="w-full p-2 bg-white text-black rounded">
+                                    <InputError class="mt-2" :message="form.errors.name" />
                                 </div>
                                 <div>
                                     <label class="block mb-2">Address</label>
                                     <input type="text" v-model="form.address"
                                         class="w-full p-2 bg-white text-black rounded">
+                                    <InputError class="mt-2" :message="form.errors.address" />
                                 </div>
                                 <div>
                                     <label class="block mb-2">Description</label>
                                     <textarea v-model="form.description"
                                         class="w-full p-2 bg-white text-black rounded"></textarea>
+                                    <InputError class="mt-2" :message="form.errors.description" />
                                 </div>
                                 <div>
                                     <label class="block mb-2">Short Description</label>
-                                    <input type="text" v-model="form.shortDescription"
+                                    <input type="text" v-model="form.short_description"
                                         class="w-full p-2 bg-white text-black rounded">
+                                    <InputError class="mt-2" :message="form.errors.short_description" />
                                 </div>
                                 <button type="submit"
                                     class="mt-4 bg-white text-red-800 px-4 py-2 rounded">Create</button>

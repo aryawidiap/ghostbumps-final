@@ -12,6 +12,11 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 defineProps(['locations']);
+
+function getImageSrc(path: string) {
+  // Normalize the path
+  return '/' + path.replace(/^\/+|\/+$/g, '').replace(/\/{2,}/g, '/')
+}
 </script>
 
 <style scoped>
@@ -33,7 +38,7 @@ defineProps(['locations']);
                     <div v-for="location in locations" v-bind:key="location.id" class="bg-red-900 rounded-3xl overflow-hidden md:flex shadow-lg mb-6">
                         <div class="md:w-1/2">
                             <!-- TODO: change the src to location:photo_path -->
-                            <img src="/img/table-tennis-1428052_1920.jpg" alt="Ghostbumps Denpasar" class="w-full h-full object-cover" />
+                            <img :src="getImageSrc(location.photo_path)" alt="Ghostbumps Denpasar" class="w-full h-full object-cover" />
                         </div>
                         <div class="md:w-1/2 p-8 space-y-4">
                             <h2 class="text-2xl font-bold font-['Special_Elite']">{{ location.name }}</h2>

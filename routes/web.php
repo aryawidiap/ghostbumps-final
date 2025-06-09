@@ -55,11 +55,11 @@ Route::middleware(['auth', 'verified', 'role:admin']) // TODO: add role middlewa
         Route::resource('bookings', BookingController::class)
             ->only(['index', 'store', 'create', 'show', 'edit', 'update']);
 
-        Route::get('locations', [LocationController::class, 'index'])->name('locations');
 
         Route::resource('locations', LocationController::class)
             ->only(['index', 'store', 'show', 'create', 'edit', 'update']);
-        
+
+        Route::get('locations/create/{location}/success', [LocationController::class, 'success'])->name('locations.create.success');        
         Route::name('bookings.')
         ->prefix('bookings')
         ->group(function () {

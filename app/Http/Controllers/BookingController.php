@@ -131,7 +131,7 @@ class BookingController extends Controller
         if ($user->hasRole('customer')) {
             $validated = $request->validate([
                 'location_id' => ['required', 'int', new ValidLocation],
-                'date' => ['required', 'date', 'max:255'],
+                'date' => ['required', 'date',],
                 'time' => ['required', 'int', 'min:10', 'max:20'],
                 'number_of_persons' => ['required', 'int', 'max:10', 'min:1'],
             ]);
@@ -147,9 +147,6 @@ class BookingController extends Controller
                     'status' => 'confirmed',
                 ]
             );
-            // return Inertia::render('bookings/new/Confirmed', [
-            //     'confirmedTicket' => $bookingTicket
-            // ]);
 
             return redirect(route('customer.bookings.new.confirmed', $bookingTicket));
         }

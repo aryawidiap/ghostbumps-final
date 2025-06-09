@@ -39,6 +39,12 @@ function submitForm() {
         forceFormData: true,
     });
 }
+
+function getImageSrc(path: string) {
+  // Normalize the path
+  return '/' + path.replace(/^\/+|\/+$/g, '').replace(/\/{2,}/g, '/')
+}
+
 </script>
 
 <style scoped>
@@ -60,7 +66,7 @@ function submitForm() {
                             <form @submit.prevent="submitForm" class="space-y-4">
                                 <div>
                                     <label class="block mb-2">Location Image</label>
-                                    <img src="/images/bowling.jpg" alt="Location Image"
+                                    <img :src="getImageSrc(location.photo_path)" alt="Location Image"
                                         class="w-full h-32 object-cover mb-2">
                                     <input type="file" ref="fileInput" class="w-full p-2 bg-white text-black rounded">
                                 </div>

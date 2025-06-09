@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Location;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class LocationController extends Controller
@@ -54,8 +56,62 @@ class LocationController extends Controller
         $user = Auth::user();
 
         if ($user->hasRole('admin')) {
-            return Inertia::render('admin/locations/Index', [
-                'locations' => Location::all()
+            $validated = $request->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'photo' => [
+                    'required',
+                    'image',
+                    Rule::dimensions()->maxWidth(2560)->maxHeight(2560),
+                ],
+                'address' => ['required', 'string', 'max:255'],
+                'description' => ['required', 'string', 'max:1000'],
+                'short_description' => ['required', 'string', 'max:500'],
+            ]);
+
+            var_dump($validated);
+            // Photo file
+            if ($request->hasFile('photo')) {
+                $photo = $request->file('photo');
+                /**
+                 * Store to storage and disk. [DO NOT DELETE]
+                 */
+                $photoName = str()->uuid() . '.' . $photo->extension();
+                $photo = Storage::disk('public')->putFileAs(
+                    "images/",
+                    $photo,
+                    $photoName
+                );
+
+                logger("Logo uploaded!");
+            }
+
+            var_dump($photo);
+
+            // var_dump($validated);
+            $location = Location::create(
+                [
+                    'name' => $validated['name'],
+                    'photo_path' => $photo ??= null,
+                    'address' => $validated['address'],
+                    'description' => $validated['description'],
+                    'short_description' => $validated['short_description'],
+                ]
+            );
+
+            return redirect(route('admin.locations.create.success', $location));
+        }
+    }
+
+    /**
+     * Display success for location insert
+     */
+    public function success(Location $location)
+    {
+        $user = Auth::user();
+
+        if ($user->hasRole('admin')) {
+            return Inertia::render('admin/locations/Success', [
+                'location' => $location
             ]);
         }
     }
@@ -82,6 +138,10 @@ class LocationController extends Controller
         $user = Auth::user();
 
         if ($user->hasRole('admin')) {
+
+            // if file is empty -> dont change the image
+
+            // if file filled, upload
             return Inertia::render('admin/locations/Edit', [
                 'location' => $location
             ]);

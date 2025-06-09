@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 255);
+            $table->string('name', 255)->primary();
             $table->string('photo_path', 255);
             $table->string('address', 255);
             $table->text('description');
