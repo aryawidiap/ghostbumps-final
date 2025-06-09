@@ -27,6 +27,10 @@ function editLocation(location: any) {
     router.visit(route('admin.locations.edit', location));
 }
 
+function getImageSrc(path: string) {
+  // Normalize the path
+  return '/' + path.replace(/^\/+|\/+$/g, '').replace(/\/{2,}/g, '/')
+}
 </script>
 
 <template>
@@ -42,7 +46,7 @@ function editLocation(location: any) {
                         <div class="bg-red-900 rounded-3xl overflow-hidden md:flex shadow-lg mb-6 font-['Oswald']">
                             <div class="md:w-1/2">
                                 <!-- TODO: change the src to location:photo_path -->
-                                <img src="/img/table-tennis-1428052_1920.jpg" alt="Ghostbumps Denpasar"
+                                <img :src="getImageSrc(location.photo_path)" alt="Ghostbumps Denpasar"
                                     class="w-full h-full object-cover" />
                             </div>
                             <div class="md:w-1/2 p-8">
