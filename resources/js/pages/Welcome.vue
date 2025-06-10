@@ -68,7 +68,7 @@ function getImageSrc(path: string) {
             <!-- Jumpscare Overlay -->
             <div v-if="showJumpscare"
                 class="fixed inset-0  bg-opacity-90 z-50 flex items-center justify-center animate-jumpscare">
-                <img src="/images/jumpscare.png" alt="Jumpscare" class="max-h-full max-w-full" />
+                <img src="/images/smile_image.png" alt="Jumpscare" class="max-h-full max-w-full" />
             </div>
 
             <!-- Header -->
@@ -104,7 +104,7 @@ function getImageSrc(path: string) {
             <!-- HELP -->
             <section class="min-h-[70vh] flex items-center justify-center text-center">
                 <h2 class="text-9xl tracking-widest text-white hover:text-red-600 transition delay-150 duration-[1s] ease-in">H  E  L  P</h2>
-                <img :src="getImageSrc('')" alt="">
+                <img :src="getImageSrc('/image/help_image.png')" alt="">
             </section>
 
             <!-- Footer -->
