@@ -44,11 +44,11 @@ function nextStep() {
                 <div class="w-full px-4 py-10">
                     <div class="text-3xl font-bold mb-2">Ticket Booking</div>
                     <div class="text-xl font-light font-['Oswald'] text-gray-300 mb-6 text-center">
-                        Please select the location to be visited.
+                        Select the number of person.
                     </div>
 
                     <!-- Booking Summary -->
-                    <div class="min-h-screen bg-red-900 flex flex-col items-center justify-center text-white rounded-xl p-6">
+                    <div class="bg-red-900 flex flex-col items-center justify-center text-white rounded-xl p-5">
                         <div class="bg-red-700 p-6 rounded-lg w-[90%] max-w-md">
                             <h2 class="font-semibold">Location</h2>
                             <p class="text-4xl">{{ location }}</p>

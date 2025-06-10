@@ -77,7 +77,7 @@ const rules = ref({
 });
 
 function nextStep() {
-  if (selectedDate.value) {
+  if (isDateSelected.value) {
     localStorage.setItem('selectedDate', date.value.toUTCString())
     localStorage.setItem('selectedTime', time.value.toString())
     localStorage.setItem('locationId', locationId.value)
@@ -103,48 +103,35 @@ function nextStep() {
                     <div class="text-xl font-light font-['Oswald'] text-gray-300 mb-6 text-center">
                         Please select the date and time.
                     </div>
-                    <div class="bg-red-900 rounded-3xl overflow-hidden mb-6 md:flex shadow-lg">
+                    <div class="flex flex-col gap-4 justify-center p-6 bg-red-900 rounded-3xl overflow-hidden mb-6 md:flex shadow-lg">
                         <!-- TODO: center these -->
-                        <VDatePicker v-model="date" :min-date="new Date()" :rules="rules" class="" @dayclick="getAvailableTime" />
+                        <div class="flex flex-col justify-center"
+                        >
+                            <h2 class="text-2xl">Select date</h2>
+                            <VDatePicker v-model="date" :min-date="new Date()" :rules="rules" class="" @dayclick="getAvailableTime" />
+                        </div>
                         <!-- fetch time data using Axios -->
 
                         <!-- Show if date is selected -->
-                        <div>
+                        <div class="mt-4 flex flex-col justify-center">
                             <!-- Show if time is not selected yet -->
-                            <h2>Select time</h2>
+                            <h2 class="text-2xl">Select time</h2>
                             <!-- Show if time is selected -->
-                            <h2 :class="{ hidden: isDateSelected }">Time: {bind to selected time}</h2>
-                            <fieldset>
-                                <ul>
-                                    <li v-for="availableTime in availableTimes" :key="availableTime.time"
-                                        :class="{ 'bg-white': !availableTime.isAvailable }">
+                            <h2 :class="{ hidden: !isDateSelected }">Time: {{ time }}.00 - {{ time+1 }}.00</h2>
+                            <fieldset class="mt-4">
+                                <ul class="flex flex-wrap gap-4">
+                                    <li class="rounded-full border border-white p-3" v-for="availableTime in availableTimes" :key="availableTime.time"
+                                        :class="{ 'bg-white text-black': availableTime.time == time }">
                                         <input type="radio" :id="availableTime.time" name="time"
                                             :value="availableTime.time" v-model="time">
-                                        <label :for="availableTime.time">{{ availableTime.time }}.00 - {{
+                                        <label class="font-['Oswald'] text-xl" :for="availableTime.time">{{ availableTime.time }}.00 - {{
                                             availableTime.time + 1 }}.00</label>
                                     </li>
                                 </ul>
                             </fieldset>
                         </div>
-                    </div>
-
-                    <div>
-                        <button type="submit">Submit</button>
-                    </div>
-                    <div class="min-h-screen bg-red-800 flex flex-col items-center justify-center text-white">
-                        <div class="bg-yellow-100 text-red-800 rounded-lg p-6">
-                            <h2 class="text-2xl font-semibold mb-4 text-center">Pick the date</h2>
-                            <!-- Dummy calendar for example -->
-                            <div class="grid grid-cols-7 gap-2">
-                                <div v-for="date in dates" :key="date" @click="selectDate(date)"
-                                    :class="{ 'bg-red-400 text-white': selectedDate === date, 'border border-red-400': true }"
-                                    class="rounded-full p-2 text-center cursor-pointer">
-                                    {{ date }}
-                                </div>
-                            </div>
-                            <button @click="nextStep"
+                        <button @click="nextStep"
                                 class="mt-4 bg-white text-red-800 px-4 py-2 rounded">Select</button>
-                        </div>
                     </div>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -16,6 +16,10 @@ defineProps(['locations']);
 function getImageSrc(path: string) {
   // Normalize the path
   return '/' + path.replace(/^\/+|\/+$/g, '').replace(/\/{2,}/g, '/')
+}
+
+function bookLocation(location: any) {
+    router.visit(route('customer.new.select-time', location));
 }
 </script>
 
@@ -42,11 +46,11 @@ function getImageSrc(path: string) {
                         </div>
                         <div class="md:w-1/2 p-8 space-y-4">
                             <h2 class="text-2xl font-bold font-['Special_Elite']">{{ location.name }}</h2>
-                            <p class="italic text-sm">{{ location.address }}</p>
-                            <p class="text-sm leading-relaxed">
+                            <p class="italic text-sm font-['Oswald']">{{ location.address }}</p>
+                            <p class="text-sm leading-relaxed font-['Oswald']">
                                 {{ location.description }}
                             </p>
-                            <button
+                            <button @click="bookLocation(location)"
                                 class="bg-white text-red-700 font-bold px-6 py-2 rounded-full hover:bg-gray-200 hover:text-red-900">
                                 Get Ticket
                             </button>

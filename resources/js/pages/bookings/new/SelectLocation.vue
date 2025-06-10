@@ -1,5 +1,7 @@
 <script setup lang="ts">
+// import { getImageSrc } from '@/app';
 import AppLayout from '@/layouts/AppLayout.vue';
+import { getImageSrc } from '@/service';
 import { type BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/vue3';
 
@@ -58,7 +60,7 @@ const toggleDropdown = () => {
                     <div v-for="location in locations" v-bind:key="location.id"
                         class="bg-red-900 rounded-3xl overflow-hidden mb-6 md:flex shadow-lg">
                         <div class="md:w-1/2">
-                            <img src="house.jpg" alt="Ghostbumps Denpasar" class="w-full h-full object-cover" />
+                            <img :src="getImageSrc(location.photo_path)" :alt="location.name" class="w-full h-full object-cover" />
                         </div>
                         <div class="md:w-1/2 p-8 space-y-4">
                             <h2 class="text-2xl font-bold font-['Special_Elite']">{{ location.name }}</h2>

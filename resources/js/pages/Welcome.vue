@@ -26,37 +26,37 @@ function getImageSrc(path: string) {
 
 </script>
 
-<template class="bg-black-100">
+<template>
 
     <Head title="Welcome" />
 
     <div
         class="flex min-h-screen flex-col items-center p-6 dark:bg-[#0a0a0a] lg:justify-center lg:p-8">
         <header class="not-has-[nav]:hidden mb-6 w-full max-w-[335px] text-sm lg:max-w-4xl">
-            <nav class="flex items-center justify-end gap-4 bg-black text-white font-['Special_Elite'] text-2xl">
+            <nav class="flex items-center justify-end gap-4  text-white font-['Special_Elite'] text-2xl">
                 <Link v-if="$page.props.auth.user" :href="route('dashboard')"
                     class="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal border-[#3E3E3A] text-[#EDEDEC] hover:border-[#62605b] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]">
                 Dashboard
                 </Link>
                 <template v-else>
                     <Link :href="route('home')"
-                        class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]">
+                        class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#EDEDEC] hover:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]">
                     Home
                     </Link>
                     <Link :href="route('locations')"
-                        class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]">
+                        class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#EDEDEC] hover:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]">
                     Locations
                     </Link>
                     <Link :href="route('login')"
-                        class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]">
+                        class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#EDEDEC] hover:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]">
                     Buy Tickets
                     </Link>
                     <Link :href="route('login')"
-                        class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]">
+                        class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#EDEDEC] hover:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]">
                     Log in
                     </Link>
                     <Link :href="route('register')"
-                        class="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]">
+                        class="inline-block rounded-sm border px-5 py-1.5 text-sm leading-normal border-[#3E3E3A] text-[#EDEDEC] hover:border-[#62605b] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]">
                     Register
                     </Link>
                 </template>
@@ -64,10 +64,10 @@ function getImageSrc(path: string) {
         </header>
 
         <main
-            class="min-h-screen w-full bg-black text-white font-['Special_Elite'] space-y-20 p-6 lg:p-12 relative overflow-hidden">
+            class="min-h-screen w-full  text-white font-['Special_Elite'] space-y-20 p-6 lg:p-12 relative overflow-hidden">
             <!-- Jumpscare Overlay -->
             <div v-if="showJumpscare"
-                class="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center animate-jumpscare">
+                class="fixed inset-0  bg-opacity-90 z-50 flex items-center justify-center animate-jumpscare">
                 <img src="/images/jumpscare.png" alt="Jumpscare" class="max-h-full max-w-full" />
             </div>
 
@@ -103,7 +103,8 @@ function getImageSrc(path: string) {
 
             <!-- HELP -->
             <section class="min-h-[70vh] flex items-center justify-center text-center">
-                <h1 class="text-9xl tracking-widest starting:text-white text-red-900 transition delay-150 duration-500 ease-in-out">H  E  L  P</h1>
+                <h2 class="text-9xl tracking-widest text-white hover:text-red-600 transition delay-150 duration-[1s] ease-in">H  E  L  P</h2>
+                <img :src="getImageSrc('')" alt="">
             </section>
 
             <!-- Footer -->
