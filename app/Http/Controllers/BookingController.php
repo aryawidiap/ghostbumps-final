@@ -300,6 +300,6 @@ class BookingController extends Controller
     {
         $user = Auth::user();
 
-        return Inertia::render('admin/bookings/Index'); // Insert page
+        return Inertia::render('Welcome'); // Insert page
     }
 }
