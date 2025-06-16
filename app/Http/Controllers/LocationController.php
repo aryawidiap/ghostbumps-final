@@ -68,7 +68,7 @@ class LocationController extends Controller
                 'short_description' => ['required', 'string', 'max:500'],
             ]);
 
-            var_dump($validated);
+            // var_dump($validated);
             // Photo file
             if ($request->hasFile('photo')) {
                 $photo = $request->file('photo');
@@ -84,8 +84,6 @@ class LocationController extends Controller
 
                 logger("Logo uploaded!");
             }
-
-            var_dump($photo);
 
             // var_dump($validated);
             $location = Location::create(

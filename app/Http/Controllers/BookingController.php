@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class BookingController extends Controller
@@ -25,9 +27,26 @@ class BookingController extends Controller
         if ($user->hasRole('admin')) {
             $user = Auth::user();
             return Inertia::render('admin/bookings/Index', [
-                'bookings' => $user->bookings()->latest()->get(),
-                'recentBookings' => $user->bookings()->latest()->get(),
-                'refundBookings' => $user->bookings()->latest()->get(),
+                'bookings' => DB::table('bookings')
+                    ->select('bookings.id as id', 'locations.name as location_name', 'booking_date', 'booking_hour', 'number_of_persons', 'status', 'description as location_description', 'photo_path', 'users.name as customer_name')
+                    ->join('locations', 'locations.id', '=', 'bookings.location_id')
+                    ->join('users', 'users.id', '=', 'bookings.user_id')
+                    ->latest('bookings.created_at')
+                    ->get(),
+                'recentBookings' => DB::table('bookings')
+                    ->select('bookings.id as id', 'locations.name as location_name', 'booking_date', 'booking_hour', 'number_of_persons', 'status', 'description as location_description', 'photo_path', 'users.name as customer_name')
+                    ->join('locations', 'locations.id', '=', 'bookings.location_id')
+                    ->join('users', 'users.id', '=', 'bookings.user_id')
+                    ->latest('bookings.created_at')
+                    ->limit(3)
+                    ->get(),
+                'refundBookings' => DB::table('bookings')
+                    ->select('bookings.id as id', 'locations.name as location_name', 'booking_date', 'booking_hour', 'number_of_persons', 'status', 'description as location_description', 'photo_path', 'users.name as customer_name')
+                    ->join('locations', 'locations.id', '=', 'bookings.location_id')
+                    ->where('status', 'cancelled')
+                    ->join('users', 'users.id', '=', 'bookings.user_id')
+                    ->latest('bookings.created_at')
+                    ->get(),
             ]);
         }
         // Customer can see their own bookings only
@@ -265,6 +284,68 @@ class BookingController extends Controller
                     ->latest('bookings.created_at')
                     ->first(),
             ]);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function refund(Booking $booking)
+    {
+        $user = Auth::user();
+
+        if ($user->hasRole('admin')) {
+            return Inertia::render('admin/bookings/refund/ProcessRefund', [
+                'booking' =>  DB::table('bookings')
+                    ->select('bookings.id as id', 'locations.name as location_name', 'booking_date', 'booking_hour', 'number_of_persons', 'status', 'description as location_description', 'photo_path', 'users.name as customer_name')
+                    ->join('locations', 'locations.id', '=', 'bookings.location_id')
+                    ->join('users', 'users.id', '=', 'bookings.user_id')
+                    ->where('bookings.id', $booking->id)
+                    ->latest('bookings.created_at')
+                    ->first(),
+            ]);
+        }
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function refundStore(Booking $booking, Request $request)
+    {
+        //
+        $user = Auth::user();
+
+        if ($user->hasRole('customer')) {
+            $validated = $request->validate([
+                'receipt' => [
+                    'required',
+                    'image',
+                    Rule::dimensions()->maxWidth(2560)->maxHeight(2560),
+                ],
+            ]);
+            var_dump($validated);
+
+            if ($request->hasFile('receipt')) {
+                $receipt = $request->file('receipt');
+                /**
+                 * Store to storage and disk. [DO NOT DELETE]
+                 */
+                $receiptName = str()->uuid() . '.' . $receipt->extension();
+                $receipt = Storage::disk('public')->putFileAs(
+                    "images/receipt",
+                    $receipt,
+                    $receiptName
+                );
+
+                logger("Receipt uploaded");
+            }
+
+            var_dump($validated);
+            $booking->status = 'refunded';
+            $booking->receipt_photo_path = $receipt ??= null;
+            $booking->save();
+
+            return redirect(route('admin.bookings.index'));
         }
     }
 

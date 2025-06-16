@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { Head, Link } from '@inertiajs/vue3';
+import Navbar from './public/components/Navbar.vue';
 
 const showJumpscare = ref(false);
 const jumpscareAudio = new Audio('/sounds/scream.mp3');
@@ -20,8 +21,8 @@ onMounted(() => {
 });
 
 function getImageSrc(path: string) {
-  // Normalize the path
-  return '/' + path.replace(/^\/+|\/+$/g, '').replace(/\/{2,}/g, '/')
+    // Normalize the path
+    return '/' + path.replace(/^\/+|\/+$/g, '').replace(/\/{2,}/g, '/')
 }
 
 </script>
@@ -30,41 +31,11 @@ function getImageSrc(path: string) {
 
     <Head title="Welcome" />
 
-    <div
-        class="flex min-h-screen flex-col items-center p-6 dark:bg-[#0a0a0a] lg:justify-center lg:p-8">
-        <header class="not-has-[nav]:hidden mb-6 w-full max-w-[335px] text-sm lg:max-w-4xl">
-            <nav class="flex items-center justify-end gap-4  text-white font-['Special_Elite'] text-2xl">
-                <Link v-if="$page.props.auth.user" :href="route('dashboard')"
-                    class="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal border-[#3E3E3A] text-[#EDEDEC] hover:border-[#62605b] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]">
-                Dashboard
-                </Link>
-                <template v-else>
-                    <Link :href="route('home')"
-                        class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#EDEDEC] hover:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]">
-                    Home
-                    </Link>
-                    <Link :href="route('locations')"
-                        class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#EDEDEC] hover:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]">
-                    Locations
-                    </Link>
-                    <Link :href="route('login')"
-                        class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#EDEDEC] hover:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]">
-                    Buy Tickets
-                    </Link>
-                    <Link :href="route('login')"
-                        class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#EDEDEC] hover:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]">
-                    Log in
-                    </Link>
-                    <Link :href="route('register')"
-                        class="inline-block rounded-sm border px-5 py-1.5 text-sm leading-normal border-[#3E3E3A] text-[#EDEDEC] hover:border-[#62605b] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]">
-                    Register
-                    </Link>
-                </template>
-            </nav>
-        </header>
+    <div class="flex min-h-screen flex-col items-center dark:bg-[#0a0a0a] lg:justify-center">
+        <Navbar />
 
         <main
-            class="min-h-screen w-full  text-white font-['Special_Elite'] space-y-20 p-6 lg:p-12 relative overflow-hidden">
+            class="min-h-screen w-full  text-white font-['Special_Elite'] space-y-20 py-6 lg:py-12 relative overflow-hidden">
             <!-- Jumpscare Overlay -->
             <div v-if="showJumpscare"
                 class="fixed inset-0  bg-opacity-90 z-50 flex items-center justify-center animate-jumpscare">
@@ -87,13 +58,18 @@ function getImageSrc(path: string) {
             <!-- Dark Voice -->
             <section class="min-h-[70vh] flex items-center justify-center text-center">
                 <p class="text-5xl italic">Something was calling for me in the dark...</p>
+
             </section>
 
             <!-- Jumpscare Trigger Text -->
             <section class="min-h-[70vh] flex items-center justify-center text-center">
-                <p class="text-lg italic text-red-500 cursor-pointer" @click="triggerJumpscare">
+                <div class="flex items-center justify-center">
+                    <img :src="getImageSrc('images/smile_image.png')"
+                        class="max-h-[110vh] object-contain opacity-0 hover:opacity-100 delay-200" alt="">
+                </div>
+                <!-- <p class="text-lg italic text-red-500 cursor-pointer" @click="triggerJumpscare">
                     (click me... if you dare)
-                </p>
+                </p> -->
             </section>
 
             <!-- Curiosity -->
@@ -102,9 +78,14 @@ function getImageSrc(path: string) {
             </section>
 
             <!-- HELP -->
-            <section class="min-h-[70vh] flex items-center justify-center text-center">
-                <h2 class="text-9xl tracking-widest text-white hover:text-red-600 transition delay-150 duration-[1s] ease-in">H  E  L  P</h2>
-                <img :src="getImageSrc('/image/help_image.png')" alt="">
+            <section
+                class="min-h-[70vh] w-svw flex items-center justify-center text-center text-white hover:text-red-600 transition delay-100 duration-[1s] ease-in">
+                <div class="flex items-center justify-center">
+                    <img :src="getImageSrc('images/help_image.png')"
+                        class="opacity-70 hover:opacity-100 delay-150 duration-[0.1s] ease-in" alt="">
+                </div>
+                <h2 class="absolute text-9xl tracking-widest ">
+                    H E L P</h2>
             </section>
 
             <!-- Footer -->

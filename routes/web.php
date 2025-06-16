@@ -31,17 +31,36 @@ Route::get('dashboard', function () {
     if ($user->hasRole('customer')) {
         return Inertia::render('Dashboard', [
             'user' => $user,
-            'logbook' => $user->bookings(),
-            'bookings' => DB::table('bookings')
+            'logbook' => DB::table('bookings')
                 ->select('bookings.id as id', 'name as location_name', 'booking_date', 'booking_hour', 'number_of_persons', 'status', 'description as location_description', 'photo_path')
                 ->join('locations', 'locations.id', '=', 'bookings.location_id')
                 ->where('user_id', $user->id)
                 ->latest('bookings.created_at')
+                ->limit(3)
                 ->get(),
-            'user' => $user->bookings()->latest()->get(),
-            'nextExperiences' => $user->bookings()->latest()->get(),
-            'visitedLocation' => $user->bookings()->latest()->get(),
-            'unvisitedLocation' => $user->bookings()->latest()->get(),
+            'nextExperience' => DB::table('bookings')
+                ->select('bookings.id as id', 'name as location_name', 'booking_date', 'booking_hour', 'number_of_persons', 'status', 'description as location_description', 'photo_path')
+                ->join('locations', 'locations.id', '=', 'bookings.location_id')
+                ->where('user_id', $user->id)
+                ->where('status', 'confirmed')
+                ->where('bookings.booking_date', '>', gmdate("Y-m-d"))
+                ->orderBy('bookings.created_at', 'asc')
+                ->limit(1)
+                ->get(),
+            'visitedLocations' => DB::table('locations')
+                ->select('locations.id as id', 'name', 'booking_date', 'status', 'short_description as description', 'photo_path')
+                ->join('bookings', 'locations.id', '=', 'bookings.location_id')
+                ->where('user_id', $user->id)
+                ->where('status', 'completed')
+                ->latest('bookings.created_at')
+                ->get(),
+            'unvisitedLocation' => DB::table('locations')
+                ->select('locations.id as id', 'name', 'booking_date', 'status', 'short_description as description', 'photo_path')
+                ->join('bookings', 'locations.id', '=', 'bookings.location_id')
+                ->where('user_id', $user->id)
+                ->where('status', 'completed')
+                ->latest('bookings.created_at')
+                ->get(),
         ]);
     }
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -84,6 +103,8 @@ Route::middleware(['auth', 'verified', 'role:admin']) // TODO: add role middlewa
             ->group(function () {
                 Route::get('new', [BookingController::class, 'create'])->name('new');
                 Route::get('refund-requests', [BookingController::class, 'refundRequestsIndex'])->name('refund-requests.index');
+                Route::get('refund/{booking}', [BookingController::class, 'refund'])->name('refund');
+                Route::post('refund/{booking}', [BookingController::class, 'refundStore'])->name('refundStore');
             });
     });
 
