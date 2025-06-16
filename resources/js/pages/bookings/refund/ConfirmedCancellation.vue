@@ -7,6 +7,11 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'My Tickets', href: '/bookings' },
     { title: 'Cancel Ticket #1234908', href: '#' },
 ];
+
+defineProps([
+    'booking',
+]);
+
 </script>
 
 <style scoped>
@@ -20,7 +25,7 @@ const breadcrumbs: BreadcrumbItem[] = [
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <div class="bg-black text-white font-['Special_Elite'] w-full min-h-screen">
                 <div class="w-full px-4 py-10 flex flex-col items-center">
-                    <div class="text-3xl font-bold mb-2">Cancel Ticket #1234908</div>
+                    <div class="text-3xl font-bold mb-2">Cancel Ticket #{{ booking.id }}</div>
                     <div class="text-5xl mb-6 text-center">
                         <span class="text-green-500">✔</span>
                     </div>
@@ -30,7 +35,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                     <div class="bg-red-900 rounded-3xl overflow-hidden mb-6 md:flex shadow-lg p-6 text-center">
                         <div class="text-white">
                             Refund in Process
-                            <div>Ticket #1234908</div>
+                            <div>Ticket {{ booking.id }}</div>
                         </div>
                     </div>
                 </div>

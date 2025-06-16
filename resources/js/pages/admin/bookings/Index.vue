@@ -11,7 +11,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-defineProps(['bookings']);
+defineProps(['bookings', 'recentBookings', 'refundBookings']);
 </script>
 
 <style scoped>

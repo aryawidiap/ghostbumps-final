@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::factory()->create([
+            'id' => 1,
             'name' => 'Test User',
             'email' => 'test@example.com',
         ])->assignRole('customer');
@@ -39,6 +40,9 @@ class DatabaseSeeder extends Seeder
             'name' => 'Employee',
             'email' => 'employee@example.com',
         ])->assignRole('employee');
-    
+
+        $this->call([
+            BookingSeeder::class,
+        ]);
     }
 }

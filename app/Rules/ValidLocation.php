@@ -15,7 +15,8 @@ class ValidLocation implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (!Location::all()->keys()->contains($value)){
+        $location = Location::find($value);
+        if (!$location){
             $fail('The :attribute is not a valid location id.');
         }
     }

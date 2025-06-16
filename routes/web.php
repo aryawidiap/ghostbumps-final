@@ -5,6 +5,7 @@ use App\Http\Controllers\LocationController;
 use App\Models\Booking;
 use App\Models\Location;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -15,20 +16,32 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('locations', [LocationController::class, 'index'])->name('locations');
+Route::get('test', [BookingController::class, 'test'])->name('test');
 
 Route::get('dashboard', function () {
     $user = Auth::user();
 
     if ($user->hasRole('admin')) {
         return Inertia::render('admin/Dashboard', [
-            'user' => $user
+            'user' => $user,
+
         ]);
-    } 
-    
+    }
+
     if ($user->hasRole('customer')) {
         return Inertia::render('Dashboard', [
             'user' => $user,
-            'logbook' => $user->bookings()
+            'logbook' => $user->bookings(),
+            'bookings' => DB::table('bookings')
+                ->select('bookings.id as id', 'name as location_name', 'booking_date', 'booking_hour', 'number_of_persons', 'status', 'description as location_description', 'photo_path')
+                ->join('locations', 'locations.id', '=', 'bookings.location_id')
+                ->where('user_id', $user->id)
+                ->latest('bookings.created_at')
+                ->get(),
+            'user' => $user->bookings()->latest()->get(),
+            'nextExperiences' => $user->bookings()->latest()->get(),
+            'visitedLocation' => $user->bookings()->latest()->get(),
+            'unvisitedLocation' => $user->bookings()->latest()->get(),
         ]);
     }
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -48,8 +61,11 @@ Route::middleware(['auth', 'verified', 'role:customer']) // TODO: add role middl
         Route::get('bookings/new/confirm-details', [BookingController::class, 'createConfirmDetails'])->name('new.confirm-details');
         Route::post('bookings/new/store', [BookingController::class, 'store'])->name('new.booking.store');
         Route::get('bookings/new/confirmed/{confirmedBooking}', [BookingController::class, 'confirmed'])->name('bookings.new.confirmed');
+        Route::get('bookings/{booking}/cancel', [BookingController::class, 'cancel'])->name('bookings.cancel');
+        Route::get('bookings/{booking}/cancel/process', [BookingController::class, 'cancelProcess'])->name('bookings.cancel.reason');
+        Route::post('bookings/{booking}/cancel', [BookingController::class, 'cancelCommit'])->name('bookings.cancel');
         Route::get('locations', [LocationController::class, 'index'])->name('locations');
-});
+    });
 
 Route::middleware(['auth', 'verified', 'role:admin']) // TODO: add role middleware
     ->name('admin.')
@@ -62,14 +78,14 @@ Route::middleware(['auth', 'verified', 'role:admin']) // TODO: add role middlewa
         Route::resource('locations', LocationController::class)
             ->only(['index', 'store', 'show', 'create', 'edit', 'update']);
 
-        Route::get('locations/create/{location}/success', [LocationController::class, 'success'])->name('locations.create.success');        
+        Route::get('locations/create/{location}/success', [LocationController::class, 'success'])->name('locations.create.success');
         Route::name('bookings.')
-        ->prefix('bookings')
-        ->group(function () {
-            Route::get('new', [BookingController::class, 'create'])->name('new');
-            Route::get('refund-requests', [BookingController::class, 'refundRequestsIndex'])->name('refund-requests.index');
-        });
-});
+            ->prefix('bookings')
+            ->group(function () {
+                Route::get('new', [BookingController::class, 'create'])->name('new');
+                Route::get('refund-requests', [BookingController::class, 'refundRequestsIndex'])->name('refund-requests.index');
+            });
+    });
 
 
 
@@ -82,6 +98,6 @@ Route::middleware(['auth', 'verified', 'role:admin']) // TODO: add role middlewa
 //         // Route::resource('/permissions', PermissionController::class);
 //         Route::resource('/bookings', BookingController::class)
 //             ->only(['index', 'update', 'show', 'store']);
-    // });
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
+// });
+require __DIR__ . '/settings.php';
+require __DIR__ . '/auth.php';

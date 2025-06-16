@@ -12,9 +12,11 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 const reason = ref('');
 
+const props = defineProps(['booking']);
+
 function nextStep() {
     if (reason.value) {
-        router.post('/bookings/cancel/1234908', { reason: reason.value });
+        router.post(route('customer.bookings.cancel', props.booking));
     }
 }
 </script>
@@ -36,7 +38,7 @@ function nextStep() {
                     <div class="bg-red-900 rounded-3xl overflow-hidden mb-6 md:flex shadow-lg p-6">
                         <div class="w-full">
                             <textarea v-model="reason" placeholder="Type your reason here..." class="w-full h-32 p-4 bg-white text-black rounded-lg"></textarea>
-                            <button @click="nextStep" :disabled="!reason" class="mt-4 bg-white text-red-800 px-4 py-2 rounded">Confirm Cancellation</button>
+                            <button @click="nextStep" :disabled="!reason" class="mt-4 bg-white text-red-800 px-4 py-2 rounded hover:cursor-pointer">Confirm Cancellation</button>
                         </div>
                     </div>
                 </div>

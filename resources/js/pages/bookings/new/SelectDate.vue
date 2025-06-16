@@ -26,7 +26,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ]
 
 const date = ref(new Date());
-const time = ref(0);
+const time = ref(10);
 const isDateSelected = ref(false);
 
 const availableTimes = ref([]);

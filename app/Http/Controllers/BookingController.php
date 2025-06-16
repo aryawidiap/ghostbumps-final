@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class BookingController extends Controller
@@ -24,14 +25,26 @@ class BookingController extends Controller
         if ($user->hasRole('admin')) {
             $user = Auth::user();
             return Inertia::render('admin/bookings/Index', [
-                'bookings' => $user->bookings()->latest()->get()
+                'bookings' => $user->bookings()->latest()->get(),
+                'recentBookings' => $user->bookings()->latest()->get(),
+                'refundBookings' => $user->bookings()->latest()->get(),
             ]);
         }
         // Customer can see their own bookings only
         if ($user->hasRole('customer')) {
             $user = Auth::user();
             return Inertia::render('bookings/Index', [
-                'bookings' => $user->bookings()->latest()->get()
+                'bookings' => DB::table('bookings')
+                    ->select('bookings.id as id', 'name as location_name', 'booking_date', 'booking_hour', 'number_of_persons', 'status', 'description as location_description', 'photo_path')
+                    ->join('locations', 'locations.id', '=', 'bookings.location_id')
+                    ->where('user_id', $user->id)
+                    ->latest('bookings.created_at')
+                    ->get(),
+                'user' => $user->bookings()->latest()->get(),
+                'logbook' => $user->bookings()->latest()->get(),
+                'nextExperiences' => $user->bookings()->latest()->get(),
+                'visitedLocation' => $user->bookings()->latest()->get(),
+                'unvisitedLocation' => $user->bookings()->latest()->get(),
             ]);
         }
     }
@@ -173,7 +186,19 @@ class BookingController extends Controller
      */
     public function show(Booking $booking)
     {
-        //
+        $user = Auth::user();
+
+        if ($user->hasRole('customer')) {
+            return Inertia::render('bookings/Show', [
+                'booking' =>  DB::table('bookings')
+                    ->select('bookings.id as id', 'name as location_name', 'booking_date', 'booking_hour', 'number_of_persons', 'status', 'description as location_description', 'photo_path')
+                    ->join('locations', 'locations.id', '=', 'bookings.location_id')
+                    ->where('bookings.id', $booking->id)
+                    // ->where('user_id', $user->id)
+                    ->latest('bookings.created_at')
+                    ->first(),
+            ]);
+        }
     }
 
     /**
@@ -184,6 +209,63 @@ class BookingController extends Controller
         // Admin can edit all booking
         // Employee can only edit their booking
         // User can only edit their booking
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function cancel(Booking $booking)
+    {
+        $user = Auth::user();
+
+        if ($user->hasRole('customer')) {
+            return Inertia::render('bookings/refund/RefundTicket', [
+                'booking' =>  DB::table('bookings')
+                    ->select('bookings.id as id', 'name as location_name', 'booking_date', 'booking_hour', 'number_of_persons', 'status', 'description as location_description', 'photo_path')
+                    ->join('locations', 'locations.id', '=', 'bookings.location_id')
+                    ->where('bookings.id', $booking->id)
+                    // ->where('user_id', $user->id)
+                    ->latest('bookings.created_at')
+                    ->first(),
+            ]);
+        }
+    }
+
+    /**
+     * Ask for reason of cancellation
+     */
+    public function cancelProcess(Booking $booking, Request $request)
+    {
+        $user = Auth::user();
+
+        if ($user->hasRole('customer')) {
+            return Inertia::render('bookings/refund/CancellationReason', [
+                'booking' =>  $booking
+            ]);
+        }
+    }
+
+    /**
+     * Commit cancellation
+     */
+    public function cancelCommit(Booking $booking, Request $request)
+    {
+        $user = Auth::user();
+
+        if ($user->hasRole('customer')) {
+            $cancelledBooking = Booking::find($booking->id);
+            $cancelledBooking->status = 'cancelled';
+            $cancelledBooking->save();
+            return Inertia::render('bookings/refund/ConfirmedCancellation', [
+                'booking' =>  DB::table('bookings')
+                    ->select('bookings.id as id', 'name as location_name', 'booking_date', 'booking_hour', 'number_of_persons', 'status', 'description as location_description', 'photo_path')
+                    ->join('locations', 'locations.id', '=', 'bookings.location_id')
+                    ->where('bookings.id', $booking->id)
+                    // ->where('user_id', $user->id)
+                    ->latest('bookings.created_at')
+                    ->first(),
+            ]);
+        }
     }
 
     /**
@@ -210,8 +292,14 @@ class BookingController extends Controller
         $user = Auth::user();
 
         if ($user->hasRole('admin')) {
-            return Inertia::render('admin/bookings/refund/RefundRequest', [
-            ]);
+            return Inertia::render('admin/bookings/refund/RefundRequest', []);
         }
+    }
+
+    public function test(Request $request)
+    {
+        $user = Auth::user();
+
+        return Inertia::render('admin/bookings/Index'); // Insert page
     }
 }

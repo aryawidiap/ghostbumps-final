@@ -19,7 +19,9 @@ class Booking extends Model
         'booking_date',
         'booking_hour',
         'number_of_persons',
-        'status'
+        'status',
+        'cancel_reason',
+        'ticket_price'
     ];
 
     // Add json description if booked by admin?
