@@ -22,9 +22,19 @@ Route::get('dashboard', function () {
     $user = Auth::user();
 
     if ($user->hasRole('admin')) {
+        $date = Date('Y-m-d');
+        $hour = Date('H');
+
         return Inertia::render('admin/Dashboard', [
             'user' => $user,
-
+            'nextBooking' => DB::table('bookings')
+                    ->select('bookings.id as id', 'locations.name as location_name', 'booking_date', 'booking_hour', 'number_of_persons', 'status', 'description as location_description', 'photo_path', 'users.name as customer_name')
+                    ->join('locations', 'locations.id', '=', 'bookings.location_id')
+                    ->join('users', 'users.id', '=', 'bookings.user_id')
+                    ->where('status', 'confirmed')
+                    ->whereRaw("CONCAT(booking_date, ' ', LPAD(booking_hour, 2, '0'), ':00:00') > ?", [$date . " " . str_pad($hour, 2, "0", STR_PAD_LEFT) . ":00:00"])
+                    ->orderBy('bookings.created_at')
+                    ->first(),
         ]);
     }
 

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->integer('number_of_persons');
             $table->string('status', 20);
             $table->string('cancel_reason', 500)->nullable();
-            $table->double('ticket_price', 20);
+            $table->double('ticket_price');
             $table->integer('cancelled_at')->nullable();
             $table->foreignId('modified_by')->nullable();
             $table->timestamps();
