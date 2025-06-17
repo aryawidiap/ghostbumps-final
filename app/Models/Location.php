@@ -18,6 +18,7 @@ class Location extends Model
         'address',
         'description',
         'short_description',
+        'location_price',
     ];
 
     public function bookings(): HasMany

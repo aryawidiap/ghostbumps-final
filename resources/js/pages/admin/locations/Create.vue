@@ -29,17 +29,6 @@ const changePhoto = (e: any) => {
 };
 
 function submitForm() {
-    // const formData = new FormData();
-    // formData.append('name', form.name);
-    // formData.append('address', form.address);
-    // formData.append('description', form.description);
-    // formData.append('short_description', form.shortDescription);
-    // if (fileInput.value?.files && fileInput.value.files[0]) {
-    //     formData.append('image', fileInput.value.files[0]);
-    // }
-    // router.post(route('admin.locations.store'), formData, {
-    //     forceFormData: true,
-    // });
     form.post(route('admin.locations.store'));
 }
 </script>

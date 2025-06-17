@@ -11,7 +11,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-defineProps(['user', 'logbook', 'nextExperience', 'visitedLocations', 'unvisitedLocation']);
+defineProps(['user', 'logbook', 'nextExperience', 'visitedLocations', 'unvisitedLocations']);
 
 
 
@@ -91,12 +91,11 @@ const newAdventures = [
                 <!-- New Adventure Section -->
                 <h2 class="text-2xl mb-4">New adventure awaits</h2>
                 <div class="grid md:grid-cols-3 gap-6">
-                    <div v-for="exp in newAdventures" :key="exp.name"
+                    <div v-for="exp in unvisitedLocations" :key="exp.name"
                         class="bg-gray-300 text-black p-4 rounded-lg text-center">
                         <p class="font-semibold text-lg mb-2">{{ exp.name }}</p>
                         <p class="mb-4">{{ exp.description }}</p>
-                        <button class="bg-red-600 text-white rounded-full px-4 py-1 hover:bg-red-800 transition">Learn
-                            more</button>
+                        <a href="" class="bg-red-600 text-white rounded-full px-4 py-1 hover:bg-red-800 transition">Book ticket</a>
                     </div>
                 </div>
             </div>

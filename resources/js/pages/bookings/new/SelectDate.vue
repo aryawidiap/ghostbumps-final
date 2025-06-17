@@ -2,7 +2,7 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import { reactive } from 'vue';
+import { computed, reactive } from 'vue';
 import { router } from '@inertiajs/vue3';
 // for fetching available time
 // ref is also used to render VCalendar
@@ -30,13 +30,22 @@ const time = ref(10);
 const isDateSelected = ref(false);
 
 const availableTimes = ref([]);
+
+function formattedDate(date: Date) {
+  const d = date;
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0'); // months are 0-based
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 const getAvailableTime = () => {
     if (!isDateSelected.value) {
         isDateSelected.value = true;
     }
-    console.log(date)
-    console.log(date.value.getUTCDate())
-    axios.get('/api/availableTime', { params: { date: date } })
+    console.log(formattedDate(date.value))
+    // console.log(date.value.getUTCDate())
+    axios.get('/api/availableTime', { params: { date: formattedDate(date.value) } })
         .then(
             (res) => {
                 console.log(res.data)

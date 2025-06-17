@@ -6,6 +6,7 @@ use App\Models\Booking;
 use App\Models\Location;
 use App\Rules\ValidLocation;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
@@ -101,6 +102,8 @@ class BookingController extends Controller
     public function getAvailableTimeSlot(Request $request)
     {
         $allTimeSlot = [];
+        $date = $request->input('date');
+    
 
         for ($i = 10; $i <= 20; $i++) {
             if ($i == 13) {
@@ -117,7 +120,19 @@ class BookingController extends Controller
             ]);
         }
 
-        $date = $request->input('date');
+        // $bookedHours = DB::table('bookings')
+        //     ->select('booking_hour')
+        //     ->whereDate('booking_date', $formattedDate)
+        //     ->orderByDesc('created_at')
+        //     ->get()
+        //     ->toArray();
+
+
+        // var_dump($allTimeSlot);l
+        // var_dump($bookedHours);
+
+        // print ($allTimeSlot);
+        // print ($bookedHours);
 
 
         $availableTimeSlot = [...$allTimeSlot, $date];
@@ -168,7 +183,23 @@ class BookingController extends Controller
                 'number_of_persons' => ['required', 'int', 'max:10', 'min:1'],
             ]);
 
-            // var_dump($validated);
+            $location_id = $validated['location_id'];
+            $number_of_persons = $validated['number_of_persons'];
+
+            $location_price_query = DB::table('locations')
+                ->select('location_price')
+                ->where('locations.id', $location_id)
+                ->first();
+
+            if ($location_price_query) {
+                $location_price = (int) $location_price_query->location_price; // cast to integer
+                $ticket_price = $location_price * $number_of_persons;
+            } else {
+                // Handle missing location (optional)
+                $ticket_price = 0; // or throw an exception
+            }
+
+
             $bookingDate = Carbon::parse($validated['date'])->format('Y-m-d H:i:s');
             $bookingTicket = $user->bookings()->create(
                 [
@@ -176,6 +207,7 @@ class BookingController extends Controller
                     'booking_date' => $bookingDate,
                     'booking_hour' => $validated['time'],
                     'number_of_persons' => $validated['number_of_persons'],
+                    'ticket_price' => $ticket_price,
                     'status' => 'confirmed',
                 ]
             );
@@ -209,7 +241,7 @@ class BookingController extends Controller
 
         if ($user->hasRole('customer')) {
             return Inertia::render('bookings/Show', [
-                'booking' =>  DB::table('bookings')
+                'booking' => DB::table('bookings')
                     ->select('bookings.id as id', 'name as location_name', 'booking_date', 'booking_hour', 'number_of_persons', 'status', 'description as location_description', 'photo_path')
                     ->join('locations', 'locations.id', '=', 'bookings.location_id')
                     ->where('bookings.id', $booking->id)
@@ -239,7 +271,7 @@ class BookingController extends Controller
 
         if ($user->hasRole('customer')) {
             return Inertia::render('bookings/refund/RefundTicket', [
-                'booking' =>  DB::table('bookings')
+                'booking' => DB::table('bookings')
                     ->select('bookings.id as id', 'name as location_name', 'booking_date', 'booking_hour', 'number_of_persons', 'status', 'description as location_description', 'photo_path')
                     ->join('locations', 'locations.id', '=', 'bookings.location_id')
                     ->where('bookings.id', $booking->id)
@@ -259,7 +291,7 @@ class BookingController extends Controller
 
         if ($user->hasRole('customer')) {
             return Inertia::render('bookings/refund/CancellationReason', [
-                'booking' =>  $booking
+                'booking' => $booking
             ]);
         }
     }
@@ -276,7 +308,7 @@ class BookingController extends Controller
             $cancelledBooking->status = 'cancelled';
             $cancelledBooking->save();
             return Inertia::render('bookings/refund/ConfirmedCancellation', [
-                'booking' =>  DB::table('bookings')
+                'booking' => DB::table('bookings')
                     ->select('bookings.id as id', 'name as location_name', 'booking_date', 'booking_hour', 'number_of_persons', 'status', 'description as location_description', 'photo_path')
                     ->join('locations', 'locations.id', '=', 'bookings.location_id')
                     ->where('bookings.id', $booking->id)
@@ -296,7 +328,7 @@ class BookingController extends Controller
 
         if ($user->hasRole('admin')) {
             return Inertia::render('admin/bookings/refund/ProcessRefund', [
-                'booking' =>  DB::table('bookings')
+                'booking' => DB::table('bookings')
                     ->select('bookings.id as id', 'locations.name as location_name', 'booking_date', 'booking_hour', 'number_of_persons', 'status', 'description as location_description', 'photo_path', 'users.name as customer_name')
                     ->join('locations', 'locations.id', '=', 'bookings.location_id')
                     ->join('users', 'users.id', '=', 'bookings.user_id')
@@ -323,7 +355,7 @@ class BookingController extends Controller
                     Rule::dimensions()->maxWidth(2560)->maxHeight(2560),
                 ],
             ]);
-            var_dump($validated);
+            // var_dump($validated);
 
             if ($request->hasFile('receipt')) {
                 $receipt = $request->file('receipt');
@@ -340,7 +372,7 @@ class BookingController extends Controller
                 logger("Receipt uploaded");
             }
 
-            var_dump($validated);
+            // var_dump($validated);
             $booking->status = 'refunded';
             $booking->receipt_photo_path = $receipt ??= null;
             $booking->save();

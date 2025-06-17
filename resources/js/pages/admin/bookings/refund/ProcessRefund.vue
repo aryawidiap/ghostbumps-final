@@ -22,13 +22,12 @@ const form = useForm({
     receipt: new File([""], "receipt"),
 });
 
+const changePhoto = (e: any) => {
+    form.receipt = e.target.files[0];
+};
+
 function submitRefund() {
-    // const formData = new FormData();
-    if (fileInput.value?.files && fileInput.value.files[0]) {
-        // formData.append('receipt', fileInput.value.files[0]);
-        form.receipt = fileInput.value.files[0];
-    }
-    router.post(route('admin.bookings.refundStore', props.booking));
+    form.post(route('admin.bookings.refundStore', props.booking));
 }
 </script>
 
@@ -86,9 +85,10 @@ function submitRefund() {
                                 <div class="mt-4">
                                     <label class="block text-gray-300">Refund Receipt</label>
                                     <input type="file" ref="fileInput"
-                                        class="w-full p-2 bg-white text-black rounded mb-4">
+                                        class="w-full p-2 bg-white text-black rounded mb-4" @input="changePhoto">
                                     <InputError class="mt-2" :message="form.errors.receipt" />
                                 </div>
+                                
                                 <button type="submit"
                                     class="bg-yellow-500 text-black px-4 py-2 rounded hover:cursor-pointer">Refund</button>
                             </form>

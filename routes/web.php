@@ -39,6 +39,8 @@ Route::get('dashboard', function () {
     }
 
     if ($user->hasRole('customer')) {
+        $date = Date('Y-m-d');
+        $hour = Date('H');
         return Inertia::render('Dashboard', [
             'user' => $user,
             'logbook' => DB::table('bookings')
@@ -53,10 +55,11 @@ Route::get('dashboard', function () {
                 ->join('locations', 'locations.id', '=', 'bookings.location_id')
                 ->where('user_id', $user->id)
                 ->where('status', 'confirmed')
-                ->where('bookings.booking_date', '>', gmdate("Y-m-d"))
+                ->whereRaw("CONCAT(booking_date, ' ', LPAD(booking_hour, 2, '0'), ':00:00') > ?", [$date . " " . str_pad($hour, 2, "0", STR_PAD_LEFT) . ":00:00"])
+                // ->where('bookings.booking_date', '>', gmdate("Y-m-d"))
                 ->orderBy('bookings.created_at', 'asc')
                 ->limit(1)
-                ->get(),
+                ->first(),
             'visitedLocations' => DB::table('locations')
                 ->select('locations.id as id', 'name', 'booking_date', 'status', 'short_description as description', 'photo_path')
                 ->join('bookings', 'locations.id', '=', 'bookings.location_id')
@@ -64,12 +67,9 @@ Route::get('dashboard', function () {
                 ->where('status', 'completed')
                 ->latest('bookings.created_at')
                 ->get(),
-            'unvisitedLocation' => DB::table('locations')
-                ->select('locations.id as id', 'name', 'booking_date', 'status', 'short_description as description', 'photo_path')
-                ->join('bookings', 'locations.id', '=', 'bookings.location_id')
-                ->where('user_id', $user->id)
-                ->where('status', 'completed')
-                ->latest('bookings.created_at')
+            'unvisitedLocations' => DB::table('locations')
+                ->select('locations.id as id', 'name', 'short_description as description', 'photo_path')
+                ->latest('locations.created_at')
                 ->get(),
         ]);
     }

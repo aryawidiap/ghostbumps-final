@@ -93,6 +93,7 @@ class LocationController extends Controller
                     'address' => $validated['address'],
                     'description' => $validated['description'],
                     'short_description' => $validated['short_description'],
+                    'location_price' => 20000,
                 ]
             );
 

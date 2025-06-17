@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('address', 255);
             $table->text('description');
             $table->text('short_description');
-            $table->double('location_price');
+            $table->double('location_price')->default(20000);
             $table->timestamps();
         });
     }
